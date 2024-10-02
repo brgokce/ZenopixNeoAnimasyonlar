@@ -1,10 +1,12 @@
 #include "hsbcolorwheel.h"
+#include <QPainter>
+#include <QMouseEvent>
 
 HSBColorWheel::HSBColorWheel(QWidget *parent)
-    : QWidget(parent), currentHue(0), currentSaturation(255), currentBrightness(255)
+    : QWidget(parent), currentHue(0), currentSaturation(255), currentBrightness(255), dragging(false)
 {
     // Widget'ı üç dikdörtgene ayır
-    int rectHeight = height() / 3; // Yüksekliği dört parçaya böldük
+    int rectHeight = height() / 3; // Yüksekliği üç parçaya böldük
     int rectWidth = width(); // Genişliği tam al
 
     // Genişliği artırıyoruz
@@ -14,6 +16,9 @@ HSBColorWheel::HSBColorWheel(QWidget *parent)
     hueRect = QRect(0, 0, increasedWidth, rectHeight * 2);           // Hue kısmı daha yüksek
     saturationRect = QRect(0, rectHeight * 2, increasedWidth, rectHeight * 1.5); // Saturation kısmı
     brightnessRect = QRect(0, rectHeight * 3 + rectHeight * 0.5, increasedWidth, rectHeight * 2); // Brightness kısmı daha yüksek
+
+    // Daire merkezini başlangıçta tanımla
+    circleCenter = QPoint(0, 0); // İlk daire merkezi
 }
 
 void HSBColorWheel::paintEvent(QPaintEvent *event)
@@ -40,17 +45,36 @@ void HSBColorWheel::paintEvent(QPaintEvent *event)
     brightnessGradient.setColorAt(0, QColor(0, 0, 0));
     brightnessGradient.setColorAt(1, QColor::fromHsv(currentHue, currentSaturation, 255));
     painter.fillRect(brightnessRect, brightnessGradient);
+
+    // Daire çizimi
+    painter.setBrush(QColor(currentHue, currentSaturation, currentBrightness, 128)); // Şeffaflık %50
+    painter.drawEllipse(circleCenter, 10, 10); // Dairenin boyutu
 }
 
 void HSBColorWheel::mousePressEvent(QMouseEvent *event)
 {
-    updateColor(event->pos());
+    if (event->button() == Qt::LeftButton) {
+        dragging = true;
+        circleCenter = event->pos(); // Daire merkezini güncelle
+        updateColor(event->pos());
+        update(); // Yenile
+    }
 }
 
 void HSBColorWheel::mouseMoveEvent(QMouseEvent *event)
 {
-    if (event->buttons() & Qt::LeftButton) {
+    if (dragging && (event->buttons() & Qt::LeftButton)) {
+        circleCenter = event->pos(); // Daire merkezini güncelle
         updateColor(event->pos());
+        update(); // Yenile
+    }
+}
+
+void HSBColorWheel::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton) {
+        dragging = false; // Sürüklemeyi durdur
+        update(); // Yenile
     }
 }
 

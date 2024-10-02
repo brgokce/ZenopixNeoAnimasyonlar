@@ -24,6 +24,8 @@ protected:
    void paintEvent(QPaintEvent *event) override;
    void mousePressEvent(QMouseEvent *event) override;
    void mouseMoveEvent(QMouseEvent *event) override;
+   void mouseReleaseEvent(QMouseEvent *event) override;
+
 
 private:
    int currentHue;
@@ -33,6 +35,9 @@ private:
    QRect hueRect;
    QRect saturationRect;
    QRect brightnessRect;
+   bool dragging;
+   QPoint circleCenter;
+
 
    void updateColor(const QPoint &pos);
    void updateHue(const QPoint &pos);
