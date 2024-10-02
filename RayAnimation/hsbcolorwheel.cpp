@@ -5,17 +5,14 @@
 HSBColorWheel::HSBColorWheel(QWidget *parent)
     : QWidget(parent), currentHue(0), currentSaturation(255), currentBrightness(255), dragging(false)
 {
-    // Widget'ı üç dikdörtgene ayır
-    int rectHeight = height() / 3; // Yüksekliği üç parçaya böldük
-    int rectWidth = width(); // Genişliği tam al
+    // Yükseklik sabit
+    int rectHeight = 30; // Her alan için yükseklik
+    int rectWidth = 150; // Her alan için genişlik
 
-    // Genişliği artırıyoruz
-    int increasedWidth = rectWidth * 1.5; // Genişliği artır
-
-    // Yükseklikleri ayarla
-    hueRect = QRect(0, 0, increasedWidth, rectHeight * 2);           // Hue kısmı daha yüksek
-    saturationRect = QRect(0, rectHeight * 2, increasedWidth, rectHeight * 1.5); // Saturation kısmı
-    brightnessRect = QRect(0, rectHeight * 3 + rectHeight * 0.5, increasedWidth, rectHeight * 2); // Brightness kısmı daha yüksek
+    // Yükseklikleri ve konumları ayarla
+    hueRect = QRect(0, 0, rectWidth, rectHeight);          // Hue kısmı
+    saturationRect = QRect(0, rectHeight + 5, rectWidth, rectHeight); // Saturation kısmı
+    brightnessRect = QRect(0, (rectHeight + 5) * 2, rectWidth, rectHeight); // Brightness kısmı
 
     // Daire merkezini başlangıçta tanımla
     circleCenter = QPoint(0, 0); // İlk daire merkezi
@@ -112,4 +109,3 @@ void HSBColorWheel::updateBrightness(const QPoint &pos)
     emit brightnessChanged(currentBrightness);
     update();
 }
-

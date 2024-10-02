@@ -147,7 +147,7 @@ public:
         labelray->setGeometry(QRect(10, 10, 81, 16));
         gridLayoutWidget = new QWidget(centralwidget);
         gridLayoutWidget->setObjectName("gridLayoutWidget");
-        gridLayoutWidget->setGeometry(QRect(410, 300, 160, 80));
+        gridLayoutWidget->setGeometry(QRect(410, 300, 160, 131));
         gridLayout = new QGridLayout(gridLayoutWidget);
         gridLayout->setObjectName("gridLayout");
         gridLayout->setContentsMargins(0, 0, 0, 0);

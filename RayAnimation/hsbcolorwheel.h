@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QPainter>
 #include <QMouseEvent>
+#include <QLabel>
 
 class HSBColorWheel : public QWidget
 {
@@ -43,6 +44,10 @@ private:
    void updateHue(const QPoint &pos);
    void updateSaturation(const QPoint &pos);
    void updateBrightness(const QPoint &pos);
+
+   QLabel *hueLabel; // Hue etiketi
+   QLabel *saturationLabel; // Saturation etiketi
+   QLabel *brightnessLabel;
 };
 
 #endif // HSBCOLORWHEEL_H
