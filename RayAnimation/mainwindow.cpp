@@ -16,6 +16,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     colorWheel= new ColorWheelWidget(this);
 
+    hsbcolorwheel= new HSBColorWheel(this);
+
+    if(ui->gridLayout)
+    {
+        ui->gridLayout->addWidget(hsbcolorwheel);
+    }
+
     ui->verticalLayout->addWidget(colorWheel);
 
     connect(rayAnimthread,SIGNAL(processFinished(cv::Mat)),this,SLOT(onprocessFinished(cv::Mat)));
@@ -23,6 +30,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(colorWheel, &ColorWheelWidget::colorHovered, this, &MainWindow::onColorHovered);
 
     connect(colorWheel, &ColorWheelWidget::colorSelected, this, &MainWindow::onColorSelected);
+
+    connect(hsbcolorwheel, &HSBColorWheel::hueChanged, this, &MainWindow::onHueChanged);
+    connect(hsbcolorwheel, &HSBColorWheel::saturationChanged, this, &MainWindow::onSaturationChanged);
+    connect(hsbcolorwheel, &HSBColorWheel::brightnessChanged, this, &MainWindow::onBrightnessChanged);
 
     core->spinbox= ui->spinBox_3;
 
@@ -234,4 +245,20 @@ void MainWindow::onColorSelected(const QColor &color)
     updateRayColors();
 }
 
+void MainWindow::onHueChanged(int hue)
+{
+    // Hue değiştiğinde yapılacak işlemler
+    qDebug() << "Hue: " << hue;
+}
 
+void MainWindow::onSaturationChanged(int saturation)
+{
+    // Saturation değiştiğinde yapılacak işlemler
+    qDebug() << "Saturation: " << saturation;
+}
+
+void MainWindow::onBrightnessChanged(int brightness)
+{
+    // Brightness değiştiğinde yapılacak işlemler
+    qDebug() << "Brightness: " << brightness;
+}

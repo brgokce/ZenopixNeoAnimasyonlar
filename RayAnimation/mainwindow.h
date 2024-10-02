@@ -50,6 +50,10 @@ private slots:
     void onColorHovered(const QColor &color);
     void onColorSelected(const QColor &color);
 
+    void onHueChanged(int hue);
+    void onSaturationChanged(int saturation);
+    void onBrightnessChanged(int brightness);
+
 
 private:
     Ui::MainWindow *ui;

@@ -13,6 +13,7 @@ public:
    explicit HSBColorWheel(QWidget *parent = nullptr);
 
 
+
 signals:
    void colorChanged(const QColor &color);
    void hueChanged(int hue);
@@ -25,8 +26,18 @@ protected:
    void mouseMoveEvent(QMouseEvent *event) override;
 
 private:
-   QColor currentColor;
+   int currentHue;
+   int currentSaturation;
+   int currentBrightness;
+
+   QRect hueRect;
+   QRect saturationRect;
+   QRect brightnessRect;
+
    void updateColor(const QPoint &pos);
+   void updateHue(const QPoint &pos);
+   void updateSaturation(const QPoint &pos);
+   void updateBrightness(const QPoint &pos);
 };
 
 #endif // HSBCOLORWHEEL_H

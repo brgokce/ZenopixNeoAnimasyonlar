@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QWidget>
+#include "hsbcolorwheel.h"
 #include "opencv2/opencv.hpp"
 #include "qslider.h"
 #include "qspinbox.h"
@@ -52,6 +53,7 @@ public:
     QSpinBox* spinbox;
     cv::Scalar currentRayColor;
     QSlider* brightnessSlider;
+
 
     cv::Scalar RandomColor();
 };
