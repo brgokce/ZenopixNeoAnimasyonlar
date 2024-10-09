@@ -1,22 +1,34 @@
 #ifndef HSBCOLORWHEEL_H
 #define HSBCOLORWHEEL_H
 
+#include "opencv2/core/types.hpp"
 #include <QObject>
 #include <QWidget>
 #include <QPainter>
 #include <QMouseEvent>
 #include <QLabel>
 
+class RayAnimThread;
+
+class Core;
+
 class HSBColorWheel : public QWidget
+
 {
     Q_OBJECT
 public:
-   explicit HSBColorWheel(QWidget *parent = nullptr);
+   explicit HSBColorWheel(Core* c, QWidget *parent = nullptr);
+   QColor hsbToRgb(int h, int s, int v);
+   cv::Scalar qColorToScalar(const QColor& color);
 
+   int getCurrentHue() const { return currentHue; }
+   int getCurrentSaturation() const { return currentSaturation; }
+   int getCurrentBrightness() const { return currentBrightness; }
 
 
 signals:
    void colorChanged(const QColor &color);
+
    void hueChanged(int hue);
    void saturationChanged(int saturation);
    void brightnessChanged(int brightness);
@@ -29,6 +41,7 @@ protected:
 
 
 private:
+
    int currentHue;
    int currentSaturation;
    int currentBrightness;
@@ -45,9 +58,8 @@ private:
    void updateSaturation(const QPoint &pos);
    void updateBrightness(const QPoint &pos);
 
-   QLabel *hueLabel; // Hue etiketi
-   QLabel *saturationLabel; // Saturation etiketi
-   QLabel *brightnessLabel;
+   Core* core;
+
 };
 
 #endif // HSBCOLORWHEEL_H

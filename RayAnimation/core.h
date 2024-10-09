@@ -43,7 +43,12 @@ public:
         bool randomColorEnable= false;
         bool userChangedSpeed = false;
         bool useColorWheel = false;
+        bool useHSB=false;
         int brightness=0;
+
+        int lastHue = -1;
+        int lastSaturation = -1;
+        int lastBrightness = -1;
 
         QVector<DynamicRayAnimSet> Ray_Lines;
 
@@ -53,6 +58,7 @@ public:
     QSpinBox* spinbox;
     cv::Scalar currentRayColor;
     QSlider* brightnessSlider;
+    cv::Scalar HSBcolor;
 
 
     cv::Scalar RandomColor();

@@ -68,5 +68,6 @@ private:
     HSBColorWheel* hsbcolorwheel;
 
 
+
 };
 #endif // MAINWINDOW_H

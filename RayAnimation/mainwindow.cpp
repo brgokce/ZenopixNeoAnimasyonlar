@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     colorWheel= new ColorWheelWidget(this);
 
-    hsbcolorwheel= new HSBColorWheel(this);
+    hsbcolorwheel= new HSBColorWheel(core,this);
 
     if(ui->gridLayout)
     {
@@ -30,6 +30,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(colorWheel, &ColorWheelWidget::colorHovered, this, &MainWindow::onColorHovered);
 
     connect(colorWheel, &ColorWheelWidget::colorSelected, this, &MainWindow::onColorSelected);
+
+    connect(hsbcolorwheel, &HSBColorWheel::colorChanged, rayAnimthread, &RayAnimThread::updateColors);
 
     connect(hsbcolorwheel, &HSBColorWheel::hueChanged, this, &MainWindow::onHueChanged);
     connect(hsbcolorwheel, &HSBColorWheel::saturationChanged, this, &MainWindow::onSaturationChanged);
@@ -106,10 +108,16 @@ void MainWindow::on_radioButton_2_clicked()
         ui->horizontalSlider_3->setEnabled(true);
         updateRayColors();
     }
+    else if(core->rayanimset.useHSB)
+    {
+        core->rayanimset.useHSB=true;
+    }
+
     else
     {
         core->rayanimset.useColorWheel=true;
     }
+
 
 }
 
@@ -186,6 +194,24 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::updateRayColors()
 {
+    int currentHue = hsbcolorwheel->getCurrentHue();
+    int currentSaturation = hsbcolorwheel->getCurrentSaturation();
+    int currentBrightness = hsbcolorwheel->getCurrentBrightness();
+
+    if(core->rayanimset.useHSB)
+    {
+       QColor color = hsbcolorwheel->hsbToRgb(currentHue, currentSaturation, currentBrightness);
+       core->HSBcolor = hsbcolorwheel->qColorToScalar(color);
+
+       cv::Scalar fixedHSBColor(core->HSBcolor[2], core->HSBcolor[1], core->HSBcolor[0]); // BGR sırası
+
+
+        for (int i = 0; i < core->rayanimset.Ray_Lines.size(); ++i)
+        {
+            core->rayanimset.Ray_Lines[i].dColor = fixedHSBColor;
+        }
+
+    }
 
     if (!core->rayanimset.randomColorEnable) // Sabit renk aktifse
     {
@@ -198,7 +224,6 @@ void MainWindow::updateRayColors()
     }
 
     rayAnimthread->updateColors();
-
 
 }
 
@@ -247,18 +272,31 @@ void MainWindow::onColorSelected(const QColor &color)
 
 void MainWindow::onHueChanged(int hue)
 {
-    // Hue değiştiğinde yapılacak işlemler
+    if (core->rayanimset.lastHue != hue) {
+        core->rayanimset.lastHue = hue;
+        core->rayanimset.useHSB = true;
+        updateRayColors();  // Update colors when hue changes
+    }
     qDebug() << "Hue: " << hue;
 }
 
 void MainWindow::onSaturationChanged(int saturation)
 {
-    // Saturation değiştiğinde yapılacak işlemler
+    if (core->rayanimset.lastSaturation != saturation) {
+        core->rayanimset.lastSaturation = saturation;
+        core->rayanimset.useHSB = true;
+        updateRayColors();  // Update colors when saturation changes
+    }
     qDebug() << "Saturation: " << saturation;
 }
 
 void MainWindow::onBrightnessChanged(int brightness)
 {
-    // Brightness değiştiğinde yapılacak işlemler
+    if (core->rayanimset.lastBrightness != brightness) {
+        core->rayanimset.lastBrightness = brightness;
+        core->rayanimset.useHSB = true;
+        updateRayColors();  // Update colors when brightness changes
+    }
     qDebug() << "Brightness: " << brightness;
 }
+

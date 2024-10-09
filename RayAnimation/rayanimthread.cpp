@@ -1,11 +1,11 @@
 #include "rayanimthread.h"
 #include <QRandomGenerator>
 #include <QMutexLocker>
+#include "hsbcolorwheel.h"
 
 RayAnimThread::RayAnimThread(Core* c, QObject *parent)
     : QThread(parent), core(c), running(true)
 {
-
 }
 
 RayAnimThread::~RayAnimThread()
@@ -98,9 +98,13 @@ void RayAnimThread::run()
             dynamicRay.dColor = core->RandomColor();
         else if(core->rayanimset.useColorWheel)
             dynamicRay.dColor = core->currentRayColor;
+        else if(core->rayanimset.useHSB)
+            dynamicRay.dColor = core->HSBcolor;
 
         else
             dynamicRay.dColor = core->rayanimset.color;
+
+
 
         core->rayanimset.Ray_Lines.append(dynamicRay);
     }
@@ -172,10 +176,11 @@ void RayAnimThread::run()
 
                 else if(core->rayanimset.useColorWheel)
                     dynamicRay.dColor = core->currentRayColor;
+                else if(core->rayanimset.useHSB)
+                    dynamicRay.dColor = core->HSBcolor;
 
                 else
                     dynamicRay.dColor = core->rayanimset.color;
-
 
                 core->rayanimset.Ray_Lines.append(dynamicRay);
             }
@@ -247,3 +252,4 @@ void RayAnimThread::run()
         blinkCounter++;
     }
 }
+

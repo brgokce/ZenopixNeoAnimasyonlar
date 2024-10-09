@@ -17,6 +17,10 @@ public:
     void updateColors();
     void stop();
 
+    void onHueChanged(int hue);
+    void onSaturationChanged(int saturation);
+    void onBrightnessChanged(int brightness);
+
 signals:
     void processFinished(cv::Mat img);
     void colorsUpdated();
@@ -25,6 +29,7 @@ private:
     Core* core;
     bool running;
     QMutex mutex;
+    HSBColorWheel* hsbcolorwheel;
 
 };
 

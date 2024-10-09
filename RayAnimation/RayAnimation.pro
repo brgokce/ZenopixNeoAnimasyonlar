@@ -26,9 +26,9 @@ HEADERS += \
 FORMS += \
     mainwindow.ui
 
-INCLUDEPATH += C:\Users\Blue\Desktop\OPENCV\opencv\build\install\include
+INCLUDEPATH +=C:\Users\ASUS\Desktop\OPENCV2\opencv\build\install\include
 
-LIBS += -L"C:\Users\Blue\Desktop\OPENCV\opencv\build\install\x64\mingw\bin" \
+LIBS += -L"C:\Users\ASUS\Desktop\OPENCV2\opencv\build\install\x64\mingw\bin" \
 libopencv_aruco480 \
 libopencv_aruco480 \
 libopencv_bgsegm480 \

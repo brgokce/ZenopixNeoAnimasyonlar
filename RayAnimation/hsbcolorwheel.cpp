@@ -1,9 +1,13 @@
 #include "hsbcolorwheel.h"
+#include "opencv2/core/types.hpp"
+#include "rayanimthread.h"
 #include <QPainter>
 #include <QMouseEvent>
 
-HSBColorWheel::HSBColorWheel(QWidget *parent)
-    : QWidget(parent), currentHue(0), currentSaturation(255), currentBrightness(255), dragging(false)
+
+
+HSBColorWheel::HSBColorWheel(Core* c, QWidget *parent)
+    : QWidget(parent),currentHue(0), core(c), currentSaturation(255), currentBrightness(255), dragging(false)
 {
     // Yükseklik sabit
     int rectHeight = 30; // Her alan için yükseklik
@@ -84,6 +88,9 @@ void HSBColorWheel::updateColor(const QPoint &pos)
     } else if (brightnessRect.contains(pos)) {
         updateBrightness(pos);
     }
+     QColor newColor = hsbToRgb(currentHue, currentSaturation, currentBrightness);
+     core->HSBcolor = qColorToScalar(newColor);
+     emit colorChanged(newColor);
 }
 
 void HSBColorWheel::updateHue(const QPoint &pos)
@@ -91,6 +98,8 @@ void HSBColorWheel::updateHue(const QPoint &pos)
     int hue = (pos.x() * 360) / width();
     currentHue = qBound(0, hue, 360);
     emit hueChanged(currentHue);
+
+
     update();
 }
 
@@ -108,4 +117,32 @@ void HSBColorWheel::updateBrightness(const QPoint &pos)
     currentBrightness = qBound(0, brightness, 255);
     emit brightnessChanged(currentBrightness);
     update();
+}
+
+QColor HSBColorWheel::hsbToRgb(int h, int s, int v)
+{
+    int r, g, b;
+    if (s == 0) {
+        r = g = b = v; // Gri ton
+    } else {
+        int hf = h / 60;
+        int p = (v * (255 - s)) / 255;
+        int q = (v * (255 - (s * (h % 60)) / 255)) / 255;
+        int t = (v * (255 - (s * (60 - (h % 60))) / 255)) / 255;
+
+        switch (hf) {
+        case 0: r = v; g = t; b = p; break;
+        case 1: r = q; g = v; b = p; break;
+        case 2: r = p; g = v; b = t; break;
+        case 3: r = p; g = q; b = v; break;
+        case 4: r = t; g = p; b = v; break;
+        default: r = v; g = p; b = q; break;
+        }
+    }
+    return QColor(r, g, b);
+}
+
+cv::Scalar HSBColorWheel::qColorToScalar(const QColor& color)
+{
+    return cv::Scalar(color.blue(), color.green(), color.red()); // OpenCV renk sırası BGR'dir.
 }
