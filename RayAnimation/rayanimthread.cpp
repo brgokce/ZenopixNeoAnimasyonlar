@@ -6,6 +6,7 @@
 RayAnimThread::RayAnimThread(Core* c, QObject *parent)
     : QThread(parent), core(c), running(true)
 {
+
 }
 
 RayAnimThread::~RayAnimThread()
@@ -96,10 +97,12 @@ void RayAnimThread::run()
 
         if (core->rayanimset.randomColorEnable)
             dynamicRay.dColor = core->RandomColor();
-        else if(core->rayanimset.useColorWheel)
-            dynamicRay.dColor = core->currentRayColor;
+
         else if(core->rayanimset.useHSB)
             dynamicRay.dColor = core->HSBcolor;
+
+        else if(core->rayanimset.useColorWheel)
+            dynamicRay.dColor = core->currentRayColor;
 
         else
             dynamicRay.dColor = core->rayanimset.color;
@@ -174,15 +177,17 @@ void RayAnimThread::run()
                 if (core->rayanimset.randomColorEnable)
                     dynamicRay.dColor = core->RandomColor();
 
-                else if(core->rayanimset.useColorWheel)
-                    dynamicRay.dColor = core->currentRayColor;
                 else if(core->rayanimset.useHSB)
                     dynamicRay.dColor = core->HSBcolor;
+
+                else if(core->rayanimset.useColorWheel)
+                    dynamicRay.dColor = core->currentRayColor;
 
                 else
                     dynamicRay.dColor = core->rayanimset.color;
 
                 core->rayanimset.Ray_Lines.append(dynamicRay);
+
             }
         }
 
@@ -242,6 +247,7 @@ void RayAnimThread::run()
                     ray.dColor = core->RandomColor();
                 }
             }
+
 
         }
 

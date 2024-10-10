@@ -57,7 +57,6 @@ public:
     cv::Mat Img;
     QSpinBox* spinbox;
     cv::Scalar currentRayColor;
-    QSlider* brightnessSlider;
     cv::Scalar HSBcolor;
 
 

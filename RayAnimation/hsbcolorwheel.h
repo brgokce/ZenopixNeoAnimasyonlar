@@ -25,7 +25,6 @@ public:
    int getCurrentSaturation() const { return currentSaturation; }
    int getCurrentBrightness() const { return currentBrightness; }
 
-
 signals:
    void colorChanged(const QColor &color);
 

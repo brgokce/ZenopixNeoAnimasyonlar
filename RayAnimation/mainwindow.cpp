@@ -31,8 +31,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(colorWheel, &ColorWheelWidget::colorSelected, this, &MainWindow::onColorSelected);
 
-    connect(hsbcolorwheel, &HSBColorWheel::colorChanged, rayAnimthread, &RayAnimThread::updateColors);
-
     connect(hsbcolorwheel, &HSBColorWheel::hueChanged, this, &MainWindow::onHueChanged);
     connect(hsbcolorwheel, &HSBColorWheel::saturationChanged, this, &MainWindow::onSaturationChanged);
     connect(hsbcolorwheel, &HSBColorWheel::brightnessChanged, this, &MainWindow::onBrightnessChanged);
@@ -70,7 +68,6 @@ void MainWindow::on_radioButton_clicked()
     core->rayanimset.randomColorEnable =true;
 }
 
-
 void MainWindow::on_horizontalSlider_valueChanged(int value)
 {
     core->rayanimset.color[0]= value; //red
@@ -79,7 +76,6 @@ void MainWindow::on_horizontalSlider_valueChanged(int value)
 
 }
 
-
 void MainWindow::on_horizontalSlider_2_valueChanged(int value)
 {
     core->rayanimset.color[1]= value; //green
@@ -87,7 +83,6 @@ void MainWindow::on_horizontalSlider_2_valueChanged(int value)
     updateRayColors();
 
 }
-
 
 void MainWindow::on_horizontalSlider_3_valueChanged(int value)
 {
@@ -117,8 +112,6 @@ void MainWindow::on_radioButton_2_clicked()
     {
         core->rayanimset.useColorWheel=true;
     }
-
-
 }
 
 void MainWindow::checkRadioButtonState()
@@ -127,8 +120,6 @@ void MainWindow::checkRadioButtonState()
         core->rayanimset.randomColorEnable = false;  // Hiçbir buton tıklanmadıysa false yap
     }
 }
-
-
 
 void MainWindow::on_horizontalSlider_4_valueChanged(int value)
 {
@@ -143,7 +134,6 @@ void MainWindow::on_horizontalSlider_4_valueChanged(int value)
     {
         core->rayanimset.Speed = -2*(value)+200;
     }
-
 }
 
 void MainWindow::onprocessFinished(cv::Mat img)
@@ -184,7 +174,6 @@ QImage MainWindow::matToImage(const cv::Mat &mat) const noexcept
     QImage result(mat.data, mat.cols, mat.rows, static_cast<int>(mat.step), format);
 
     return result.copy();
-
 }
 
 void MainWindow::on_pushButton_clicked()
@@ -198,29 +187,35 @@ void MainWindow::updateRayColors()
     int currentSaturation = hsbcolorwheel->getCurrentSaturation();
     int currentBrightness = hsbcolorwheel->getCurrentBrightness();
 
-    if(core->rayanimset.useHSB)
-    {
-       QColor color = hsbcolorwheel->hsbToRgb(currentHue, currentSaturation, currentBrightness);
-       core->HSBcolor = hsbcolorwheel->qColorToScalar(color);
-
-       cv::Scalar fixedHSBColor(core->HSBcolor[2], core->HSBcolor[1], core->HSBcolor[0]); // BGR sırası
-
-
-        for (int i = 0; i < core->rayanimset.Ray_Lines.size(); ++i)
-        {
-            core->rayanimset.Ray_Lines[i].dColor = fixedHSBColor;
-        }
-
-    }
-
     if (!core->rayanimset.randomColorEnable) // Sabit renk aktifse
     {
-        cv::Scalar fixedColor(core->rayanimset.color[2], core->rayanimset.color[1], core->rayanimset.color[0]); // BGR sırası
-
-        for (int i = 0; i < core->rayanimset.Ray_Lines.size(); ++i)
+        if (currentHue == 0 || currentHue == 360)
         {
-            core->rayanimset.Ray_Lines[i].dColor = fixedColor; // Sabit renk kullan
+            currentSaturation = 255; // Tam doygunluk
+            currentBrightness = 255; // Tam parlaklık
         }
+
+        QColor color = hsbcolorwheel->hsbToRgb(currentHue, currentSaturation, currentBrightness);
+        core->HSBcolor = hsbcolorwheel->qColorToScalar(color);
+
+
+        if(core->rayanimset.useHSB)
+        {
+            cv::Scalar fixedColor(core->HSBcolor[0], core->HSBcolor[1], core->HSBcolor[2]); // BGR sırası
+            for (int i = 0; i < core->rayanimset.Ray_Lines.size(); ++i)
+            {
+                core->rayanimset.Ray_Lines[i].dColor = fixedColor; // Sabit renk kullan
+            }
+        }
+        else
+        {
+            cv::Scalar fixedColor(core->rayanimset.color[2], core->rayanimset.color[1], core->rayanimset.color[0]); // BGR sırası
+            for (int i = 0; i < core->rayanimset.Ray_Lines.size(); ++i)
+            {
+                core->rayanimset.Ray_Lines[i].dColor = fixedColor; // Sabit renk kullan
+            }
+        }
+
     }
 
     rayAnimthread->updateColors();
@@ -299,4 +294,3 @@ void MainWindow::onBrightnessChanged(int brightness)
     }
     qDebug() << "Brightness: " << brightness;
 }
-

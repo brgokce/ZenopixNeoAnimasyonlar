@@ -91,6 +91,8 @@ void HSBColorWheel::updateColor(const QPoint &pos)
      QColor newColor = hsbToRgb(currentHue, currentSaturation, currentBrightness);
      core->HSBcolor = qColorToScalar(newColor);
      emit colorChanged(newColor);
+     //qDebug() << "Yeni Renk Scalar: B=" << core->HSBcolor[0] << " G=" << core->HSBcolor[1] << " R=" << core->HSBcolor[2];
+
 }
 
 void HSBColorWheel::updateHue(const QPoint &pos)
@@ -139,6 +141,7 @@ QColor HSBColorWheel::hsbToRgb(int h, int s, int v)
         default: r = v; g = p; b = q; break;
         }
     }
+    //qDebug() << "HSB -> RGB: (" << h << "," << s << "," << v << ") -> (" << r << "," << g << "," << b << ")";
     return QColor(r, g, b);
 }
 
