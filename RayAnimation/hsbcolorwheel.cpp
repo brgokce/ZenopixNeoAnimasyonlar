@@ -91,7 +91,7 @@ void HSBColorWheel::updateColor(const QPoint &pos)
      QColor newColor = hsbToRgb(currentHue, currentSaturation, currentBrightness);
      core->HSBcolor = qColorToScalar(newColor);
      emit colorChanged(newColor);
-     //qDebug() << "Yeni Renk Scalar: B=" << core->HSBcolor[0] << " G=" << core->HSBcolor[1] << " R=" << core->HSBcolor[2];
+     qDebug() << "Yeni Renk Scalar: B=" << core->HSBcolor[0] << " G=" << core->HSBcolor[1] << " R=" << core->HSBcolor[2];
 
 }
 
@@ -124,25 +124,36 @@ void HSBColorWheel::updateBrightness(const QPoint &pos)
 QColor HSBColorWheel::hsbToRgb(int h, int s, int v)
 {
     int r, g, b;
-    if (s == 0) {
-        r = g = b = v; // Gri ton
-    } else {
-        int hf = h / 60;
-        int p = (v * (255 - s)) / 255;
-        int q = (v * (255 - (s * (h % 60)) / 255)) / 255;
-        int t = (v * (255 - (s * (60 - (h % 60))) / 255)) / 255;
 
+    // Eğer saturation 0 ise, gri tonlar döndür
+    if (s == 0) {
+        r = g = b = v;
+    } else {
+        // Hue değerini 0-360 arasında tutun
+        int hf = h / 60; // hue kısmını 60'a böl
+        int p = (v * (255 - s)) / 255; // Koyu ton
+        int q = (v * (255 - (s * (h % 60)) / 255)) / 255; // Orta ton
+        int t = (v * (255 - (s * (60 - (h % 60))) / 255)) / 255; // Açık ton
+
+        // Kırmızı rengini tam vermek için hue 0 olduğunda
         switch (hf) {
-        case 0: r = v; g = t; b = p; break;
-        case 1: r = q; g = v; b = p; break;
-        case 2: r = p; g = v; b = t; break;
-        case 3: r = p; g = q; b = v; break;
-        case 4: r = t; g = p; b = v; break;
-        default: r = v; g = p; b = q; break;
+        case 0: r = v; g = t; b = p; break; // Kırmızıdan Sarıya
+        case 1: r = q; g = v; b = p; break; // Sarıdan Yeşile
+        case 2: r = p; g = v; b = t; break; // Yeşilden Ciyane
+        case 3: r = p; g = q; b = v; break; // Ciyandan Maviye
+        case 4: r = t; g = p; b = v; break; // Maviden Mor'a
+        default: r = v; g = p; b = q; break; // Mor'dan Kırmızıya
+        }
+
+        // Saturation ve brightness'a göre rengi ayarlayın
+        // Eğer tam kırmızı istiyorsanız, saturation ve brightness 255 olmalı
+        if (h == 0 && s == 255 && v == 255) {
+            return QColor(255, 0, 0); // Tam kırmızı
         }
     }
-    //qDebug() << "HSB -> RGB: (" << h << "," << s << "," << v << ") -> (" << r << "," << g << "," << b << ")";
-    return QColor(r, g, b);
+
+    // RGB değerlerini sınırlandırarak geri döndür
+    return QColor(qBound(0, r, 255), qBound(0, g, 255), qBound(0, b, 255)); // 0-255 aralığına kısıtlama
 }
 
 cv::Scalar HSBColorWheel::qColorToScalar(const QColor& color)

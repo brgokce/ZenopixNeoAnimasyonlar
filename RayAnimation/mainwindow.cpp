@@ -189,11 +189,6 @@ void MainWindow::updateRayColors()
 
     if (!core->rayanimset.randomColorEnable) // Sabit renk aktifse
     {
-        if (currentHue == 0 || currentHue == 360)
-        {
-            currentSaturation = 255; // Tam doygunluk
-            currentBrightness = 255; // Tam parlaklık
-        }
 
         QColor color = hsbcolorwheel->hsbToRgb(currentHue, currentSaturation, currentBrightness);
         core->HSBcolor = hsbcolorwheel->qColorToScalar(color);
@@ -209,6 +204,7 @@ void MainWindow::updateRayColors()
         }
         else
         {
+            core->rayanimset.useHSB= false;
             cv::Scalar fixedColor(core->rayanimset.color[2], core->rayanimset.color[1], core->rayanimset.color[0]); // BGR sırası
             for (int i = 0; i < core->rayanimset.Ray_Lines.size(); ++i)
             {
@@ -257,6 +253,7 @@ void MainWindow::onColorSelected(const QColor &color)
     qDebug() << "Selected Color (R,G,B):" << red << green << blue;
 
     core->rayanimset.useColorWheel=true;
+    core->rayanimset.useHSB=false;
 
     ui->horizontalSlider->setValue(red);
     ui->horizontalSlider_2->setValue(green);
