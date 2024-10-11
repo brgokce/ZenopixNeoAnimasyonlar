@@ -18,12 +18,56 @@ MainWindow::MainWindow(QWidget *parent)
 
     hsbcolorwheel= new HSBColorWheel(core,this);
 
-    if(ui->gridLayout)
-    {
-        ui->gridLayout->addWidget(hsbcolorwheel);
+    tabwidget = new QTabWidget(this);
+
+    sliderTab = new QWidget();
+
+    tabwidget->addTab(sliderTab, "RGB");
+
+    sliderLayout = new QVBoxLayout(sliderTab);
+
+    createColorSlider(sliderLayout, "R", ui->horizontalSlider);
+    createColorSlider(sliderLayout, "G", ui->horizontalSlider_2);
+    createColorSlider(sliderLayout, "B", ui->horizontalSlider_3);
+
+    if (ui->gridLayout_2) {
+        ui->gridLayout_2->addWidget(tabwidget);
     }
 
-    ui->verticalLayout->addWidget(colorWheel);
+    hsbcolorwheel->setHueText("Hue");
+    QLabel* HueLabel = hsbcolorwheel->getHueLabel();
+
+    QVBoxLayout* layout = new QVBoxLayout();
+    layout->addWidget(HueLabel);
+
+    hsbcolorwheel->setSaturationText("Saturation");
+
+    QLabel* saturationLabel = hsbcolorwheel->getSaturationLabel();
+    QVBoxLayout* layoutSat = new QVBoxLayout();
+    layoutSat->addWidget(saturationLabel);
+
+    hsbcolorwheel->setBrightnessText("Brightness");
+
+    QLabel* brightnesslabel = hsbcolorwheel->getSaturationLabel();
+    QVBoxLayout* layoutBrh = new QVBoxLayout();
+    layoutBrh->addWidget(brightnesslabel);
+
+    QWidget *hsbTab = new QWidget();
+    QVBoxLayout *hsbLayout = new QVBoxLayout(hsbTab);
+    hsbcolorwheel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    hsbLayout->addWidget(hsbcolorwheel);
+    hsbTab->setLayout(hsbLayout);
+    tabwidget->addTab(hsbTab, "HSB Wheel");
+
+    QWidget *tab2 = new QWidget();
+    tabwidget->addTab(tab2, "Color Wheel");
+    tab2->setLayout(new QVBoxLayout());
+    tab2->layout()->addWidget(colorWheel);
+
+    QWidget *tab3 = new QWidget();
+    QVBoxLayout *layout3 = new QVBoxLayout();
+    tab3->setLayout(layout3);
+    tabwidget->addTab(tab3, "Palette");
 
     connect(rayAnimthread,SIGNAL(processFinished(cv::Mat)),this,SLOT(onprocessFinished(cv::Mat)));
 
@@ -35,6 +79,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(hsbcolorwheel, &HSBColorWheel::saturationChanged, this, &MainWindow::onSaturationChanged);
     connect(hsbcolorwheel, &HSBColorWheel::brightnessChanged, this, &MainWindow::onBrightnessChanged);
 
+    connect(tabwidget, &QTabWidget::currentChanged, this, &MainWindow::onTabChanged);
+    connect(tabwidget, &QTabWidget::currentChanged, this, &MainWindow::onTabCWheel);
+    connect(tabwidget, &QTabWidget::currentChanged, this, &MainWindow::onTabHSB);
+
     core->spinbox= ui->spinBox_3;
 
 }
@@ -44,6 +92,17 @@ MainWindow::~MainWindow()
     rayAnimthread->stop(); // Thread'i düzgün şekilde durdur
     rayAnimthread->wait(); // Thread'in tamamen durmasını bekle
     delete ui;
+}
+
+
+
+void MainWindow::createColorSlider(QVBoxLayout *layout, const QString &labelText, QSlider *slider)
+{
+    QHBoxLayout *hLayout = new QHBoxLayout();
+    QLabel *label = new QLabel(labelText, this);
+    hLayout->addWidget(label);
+    hLayout->addWidget(slider);
+    layout->addLayout(hLayout);
 }
 
 void MainWindow::on_spinBox_valueChanged(int arg1)
@@ -290,4 +349,28 @@ void MainWindow::onBrightnessChanged(int brightness)
         updateRayColors();  // Update colors when brightness changes
     }
     qDebug() << "Brightness: " << brightness;
+}
+
+void MainWindow::onTabChanged(int index) {
+
+    if (index == 3)
+    {
+
+    }
+}
+
+void MainWindow::onTabCWheel(int index)
+{
+    if(index==1)
+    {
+
+    }
+}
+
+void MainWindow::onTabHSB(int index)
+{
+    if(index==0)
+    {
+
+    }
 }

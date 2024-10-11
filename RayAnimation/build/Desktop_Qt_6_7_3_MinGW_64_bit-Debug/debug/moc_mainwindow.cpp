@@ -53,6 +53,12 @@ constexpr auto qt_meta_stringdata_CLASSMainWindowENDCLASS = QtMocHelpers::string
     "on_radioButton_2_clicked",
     "on_spinBox_2_valueChanged",
     "on_spinBox_3_valueChanged",
+    "createColorSlider",
+    "QVBoxLayout*",
+    "layout",
+    "labelText",
+    "QSlider*",
+    "slider",
     "onColorHovered",
     "color",
     "onColorSelected",
@@ -74,7 +80,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-      16,   14, // methods
+      17,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -82,22 +88,23 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,  110,    2, 0x08,    1 /* Private */,
-       4,    0,  113,    2, 0x08,    3 /* Private */,
-       5,    1,  114,    2, 0x08,    4 /* Private */,
-       7,    1,  117,    2, 0x08,    6 /* Private */,
-       8,    1,  120,    2, 0x08,    8 /* Private */,
-       9,    1,  123,    2, 0x08,   10 /* Private */,
-      10,    0,  126,    2, 0x08,   12 /* Private */,
-      11,    1,  127,    2, 0x08,   13 /* Private */,
-      14,    0,  130,    2, 0x08,   15 /* Private */,
-      15,    1,  131,    2, 0x08,   16 /* Private */,
-      16,    1,  134,    2, 0x08,   18 /* Private */,
-      17,    1,  137,    2, 0x08,   20 /* Private */,
-      19,    1,  140,    2, 0x08,   22 /* Private */,
-      20,    1,  143,    2, 0x08,   24 /* Private */,
-      22,    1,  146,    2, 0x08,   26 /* Private */,
-      24,    1,  149,    2, 0x08,   28 /* Private */,
+       1,    1,  116,    2, 0x08,    1 /* Private */,
+       4,    0,  119,    2, 0x08,    3 /* Private */,
+       5,    1,  120,    2, 0x08,    4 /* Private */,
+       7,    1,  123,    2, 0x08,    6 /* Private */,
+       8,    1,  126,    2, 0x08,    8 /* Private */,
+       9,    1,  129,    2, 0x08,   10 /* Private */,
+      10,    0,  132,    2, 0x08,   12 /* Private */,
+      11,    1,  133,    2, 0x08,   13 /* Private */,
+      14,    0,  136,    2, 0x08,   15 /* Private */,
+      15,    1,  137,    2, 0x08,   16 /* Private */,
+      16,    1,  140,    2, 0x08,   18 /* Private */,
+      17,    3,  143,    2, 0x08,   20 /* Private */,
+      23,    1,  150,    2, 0x08,   24 /* Private */,
+      25,    1,  153,    2, 0x08,   26 /* Private */,
+      26,    1,  156,    2, 0x08,   28 /* Private */,
+      28,    1,  159,    2, 0x08,   30 /* Private */,
+      30,    1,  162,    2, 0x08,   32 /* Private */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::Int,    3,
@@ -111,11 +118,12 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,    3,
     QMetaType::Void, QMetaType::Int,    3,
-    QMetaType::Void, QMetaType::QColor,   18,
-    QMetaType::Void, QMetaType::QColor,   18,
-    QMetaType::Void, QMetaType::Int,   21,
-    QMetaType::Void, QMetaType::Int,   23,
-    QMetaType::Void, QMetaType::Int,   25,
+    QMetaType::Void, 0x80000000 | 18, QMetaType::QString, 0x80000000 | 21,   19,   20,   22,
+    QMetaType::Void, QMetaType::QColor,   24,
+    QMetaType::Void, QMetaType::QColor,   24,
+    QMetaType::Void, QMetaType::Int,   27,
+    QMetaType::Void, QMetaType::Int,   29,
+    QMetaType::Void, QMetaType::Int,   31,
 
        0        // eod
 };
@@ -159,6 +167,11 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         // method 'on_spinBox_3_valueChanged'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<int, std::false_type>,
+        // method 'createColorSlider'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QVBoxLayout *, std::false_type>,
+        QtPrivate::TypeAndForceComplete<const QString &, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QSlider *, std::false_type>,
         // method 'onColorHovered'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<const QColor &, std::false_type>,
@@ -195,12 +208,26 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 8: _t->on_radioButton_2_clicked(); break;
         case 9: _t->on_spinBox_2_valueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         case 10: _t->on_spinBox_3_valueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 11: _t->onColorHovered((*reinterpret_cast< std::add_pointer_t<QColor>>(_a[1]))); break;
-        case 12: _t->onColorSelected((*reinterpret_cast< std::add_pointer_t<QColor>>(_a[1]))); break;
-        case 13: _t->onHueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 14: _t->onSaturationChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 15: _t->onBrightnessChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 11: _t->createColorSlider((*reinterpret_cast< std::add_pointer_t<QVBoxLayout*>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<QString>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<QSlider*>>(_a[3]))); break;
+        case 12: _t->onColorHovered((*reinterpret_cast< std::add_pointer_t<QColor>>(_a[1]))); break;
+        case 13: _t->onColorSelected((*reinterpret_cast< std::add_pointer_t<QColor>>(_a[1]))); break;
+        case 14: _t->onHueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 15: _t->onSaturationChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 16: _t->onBrightnessChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         default: ;
+        }
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        switch (_id) {
+        default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
+        case 11:
+            switch (*reinterpret_cast<int*>(_a[1])) {
+            default: *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType(); break;
+            case 2:
+                *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType::fromType< QSlider* >(); break;
+            case 0:
+                *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType::fromType< QVBoxLayout* >(); break;
+            }
+            break;
         }
     }
 }
@@ -224,13 +251,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 16)
+        if (_id < 17)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 16;
+        _id -= 17;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 16)
-            *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 16;
+        if (_id < 17)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 17;
     }
     return _id;
 }

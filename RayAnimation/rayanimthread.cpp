@@ -258,4 +258,3 @@ void RayAnimThread::run()
         blinkCounter++;
     }
 }
-

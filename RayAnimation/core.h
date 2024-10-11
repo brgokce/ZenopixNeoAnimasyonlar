@@ -29,8 +29,6 @@ public:
         int deltah1;
         int deltaw1; int deltaw2;
 
-
-
     };
 
     struct RayAnimationSettings
@@ -58,7 +56,6 @@ public:
     QSpinBox* spinbox;
     cv::Scalar currentRayColor;
     cv::Scalar HSBcolor;
-
 
     cv::Scalar RandomColor();
 };

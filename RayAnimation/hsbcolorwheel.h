@@ -18,6 +18,15 @@ class HSBColorWheel : public QWidget
     Q_OBJECT
 public:
     explicit HSBColorWheel(Core* c, QWidget *parent = nullptr);
+    QLabel* getHueLabel();
+    void setHueText(const QString& text);
+
+    QLabel* getSaturationLabel();
+    void setSaturationText(const QString& text);
+
+    QLabel* getBrightnessLabel();
+    void setBrightnessText(const QString& text);
+
     QColor hsbToRgb(int h, int s, int v);
     cv::Scalar qColorToScalar(const QColor& color);
 
@@ -60,6 +69,10 @@ private:
     bool draggingHue, draggingSaturation, draggingBrightness;
 
     QPoint hueCircleCenter , saturationCircleCenter , brightnessCircleCenter ;
+
+    QLabel* HueLabel;
+    QLabel* saturationLabel;
+    QLabel* BrightnessLabel;
 
     Core* core;
 

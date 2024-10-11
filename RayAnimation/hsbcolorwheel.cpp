@@ -10,19 +10,55 @@ HSBColorWheel::HSBColorWheel(Core* c, QWidget *parent)
     : QWidget(parent),currentHue(0), core(c), currentSaturation(255), currentBrightness(255), dragging(false), draggingHue(false), draggingSaturation(false), draggingBrightness(false)
 {
     // Yükseklik sabit
-    int rectHeight = 30; // Her alan için yükseklik
-    int rectWidth = 150; // Her alan için genişlik
+    int rectHeight = 40; // Her alan için yükseklik
+    int rectWidth = 320; // Her alan için genişlik
 
     // Yükseklikleri ve konumları ayarla
-    hueRect = QRect(0, 0, rectWidth, rectHeight);          // Hue kısmı
-    saturationRect = QRect(0, rectHeight + 5, rectWidth, rectHeight); // Saturation kısmı
-    brightnessRect = QRect(0, (rectHeight + 5) * 2, rectWidth, rectHeight); // Brightness kısmı
+    hueRect = QRect(0, 20, rectWidth, rectHeight);          // Hue kısmı
+    saturationRect = QRect(0, rectHeight + 55, rectWidth, rectHeight); // Saturation kısmı
+    brightnessRect = QRect(0, (rectHeight + 45) * 2, rectWidth, rectHeight); // Brightness kısmı
 
     // Daire merkezini başlangıçta tanımla
     hueCircleCenter = QPoint(0, hueRect.center().y());
     saturationCircleCenter = QPoint(0, saturationRect.center().y());
     brightnessCircleCenter = QPoint(0, brightnessRect.center().y());
 
+    HueLabel = new QLabel(this);
+    HueLabel->setText("Hue");
+    HueLabel->move(0, 0);  // HSB widg
+
+    saturationLabel = new QLabel(this);
+    saturationLabel->setText("Saturation");  // Sabit bir string ile başlatıyoruz
+    saturationLabel->move(0, 75);  // QLabel'in pozisyonu
+
+    BrightnessLabel = new QLabel(this);
+    BrightnessLabel->setText("Brightness");  // Sabit bir string ile başlatıyoruz
+    BrightnessLabel->move(0, 150);  // QLabel'in pozisyonu
+}
+
+
+QLabel* HSBColorWheel::getHueLabel() {
+    return HueLabel;  // QLabel'e erişim sağlanıyor
+}
+
+void HSBColorWheel::setHueText(const QString& text) {
+    HueLabel->setText(text);  // QLabel'in metnini sabit bir string ile güncelliyoruz
+}
+
+QLabel* HSBColorWheel::getSaturationLabel() {
+    return saturationLabel;  // QLabel'e erişimi sağlıyoruz
+}
+
+void HSBColorWheel::setSaturationText(const QString& text) {
+    saturationLabel->setText(text);  // QLabel'in metnini sabit bir string ile güncelliyoruz
+}
+
+QLabel* HSBColorWheel::getBrightnessLabel() {
+    return BrightnessLabel;  // QLabel'e erişimi sağlıyoruz
+}
+
+void HSBColorWheel::setBrightnessText(const QString& text) {
+    BrightnessLabel->setText(text);  // QLabel'in metnini sabit bir string ile güncelliyoruz
 }
 
 void HSBColorWheel::paintEvent(QPaintEvent *event)
@@ -49,7 +85,6 @@ void HSBColorWheel::paintEvent(QPaintEvent *event)
     brightnessGradient.setColorAt(0, QColor(0, 0, 0));
     brightnessGradient.setColorAt(1, QColor::fromHsv(currentHue, currentSaturation, 255));
     painter.fillRect(brightnessRect, brightnessGradient);
-
 
     painter.setBrush(QColor(currentHue, 255, 255, Qt::transparent));
     painter.drawEllipse(hueCircleCenter, 7, 7); // Dairenin boyutu

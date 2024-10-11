@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "core.h"
 #include "hsbcolorwheel.h"
+#include "qboxlayout.h"
 #include "rayanimthread.h"
 #include "colorwheelwidget.h"
 #include "hsbcolorwheel.h"
@@ -46,6 +47,8 @@ private slots:
 
     void on_spinBox_3_valueChanged(int arg1);
 
+    void createColorSlider(QVBoxLayout *layout, const QString &labelText, QSlider *slider);
+
 private slots:
     void onColorHovered(const QColor &color);
     void onColorSelected(const QColor &color);
@@ -66,8 +69,12 @@ private:
     void updateSpinBoxLimits(int minValue, int maxValue);
     ColorWheelWidget *colorWheel;
     HSBColorWheel* hsbcolorwheel;
-
-
+    QTabWidget *tabwidget;
+    void onTabChanged(int index);
+    void onTabCWheel(int index);
+    void onTabHSB(int index);
+    QVBoxLayout *sliderLayout;
+    QWidget *sliderTab;
 
 };
 #endif // MAINWINDOW_H
