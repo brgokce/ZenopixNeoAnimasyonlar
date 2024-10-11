@@ -7,7 +7,7 @@
 
 
 HSBColorWheel::HSBColorWheel(Core* c, QWidget *parent)
-    : QWidget(parent),currentHue(0), core(c), currentSaturation(255), currentBrightness(255), dragging(false)
+    : QWidget(parent),currentHue(0), core(c), currentSaturation(255), currentBrightness(255), dragging(false), draggingHue(false), draggingSaturation(false), draggingBrightness(false)
 {
     // Yükseklik sabit
     int rectHeight = 30; // Her alan için yükseklik
@@ -19,7 +19,10 @@ HSBColorWheel::HSBColorWheel(Core* c, QWidget *parent)
     brightnessRect = QRect(0, (rectHeight + 5) * 2, rectWidth, rectHeight); // Brightness kısmı
 
     // Daire merkezini başlangıçta tanımla
-    circleCenter = QPoint(0, 0); // İlk daire merkezi
+    hueCircleCenter = QPoint(0, hueRect.center().y());
+    saturationCircleCenter = QPoint(0, saturationRect.center().y());
+    brightnessCircleCenter = QPoint(0, brightnessRect.center().y());
+
 }
 
 void HSBColorWheel::paintEvent(QPaintEvent *event)
@@ -47,26 +50,52 @@ void HSBColorWheel::paintEvent(QPaintEvent *event)
     brightnessGradient.setColorAt(1, QColor::fromHsv(currentHue, currentSaturation, 255));
     painter.fillRect(brightnessRect, brightnessGradient);
 
-    // Daire çizimi
-    painter.setBrush(QColor(currentHue, currentSaturation, currentBrightness, 128)); // Şeffaflık %50
-    painter.drawEllipse(circleCenter, 10, 10); // Dairenin boyutu
+
+    painter.setBrush(QColor(currentHue, 255, 255, Qt::transparent));
+    painter.drawEllipse(hueCircleCenter, 7, 7); // Dairenin boyutu
+
+    // Saturation için daire çizimi
+    painter.setBrush(QColor(255, currentSaturation, currentBrightness,Qt::transparent));
+    painter.drawEllipse(saturationCircleCenter, 7, 7); // Dairenin boyutu
+
+    // Brightness için daire çizimi
+    painter.setBrush(QColor(currentHue, currentSaturation, currentBrightness,Qt::transparent));
+    painter.drawEllipse(brightnessCircleCenter, 7, 7); // Dairenin boyutu
+
 }
 
 void HSBColorWheel::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        dragging = true;
-        circleCenter = event->pos(); // Daire merkezini güncelle
-        updateColor(event->pos());
+        if (hueRect.contains(event->pos())) {
+            draggingHue = true;
+            hueCircleCenter.setX(event->pos().x());
+            updateHue(event->pos());
+        } else if (saturationRect.contains(event->pos())) {
+            draggingSaturation = true;
+            saturationCircleCenter.setX(event->pos().x());
+            updateSaturation(event->pos());
+        } else if (brightnessRect.contains(event->pos())) {
+            draggingBrightness = true;
+            brightnessCircleCenter.setX(event->pos().x());
+            updateBrightness(event->pos());
+        }
         update(); // Yenile
     }
 }
-
 void HSBColorWheel::mouseMoveEvent(QMouseEvent *event)
 {
-    if (dragging && (event->buttons() & Qt::LeftButton)) {
-        circleCenter = event->pos(); // Daire merkezini güncelle
-        updateColor(event->pos());
+    if (event->buttons() & Qt::LeftButton) {
+        if (draggingHue) {
+            hueCircleCenter.setX(event->pos().x());
+            updateHue(event->pos());
+        } else if (draggingSaturation) {
+            saturationCircleCenter.setX(event->pos().x());
+            updateSaturation(event->pos());
+        } else if (draggingBrightness) {
+            brightnessCircleCenter.setX(event->pos().x());
+            updateBrightness(event->pos());
+        }
         update(); // Yenile
     }
 }
@@ -74,24 +103,19 @@ void HSBColorWheel::mouseMoveEvent(QMouseEvent *event)
 void HSBColorWheel::mouseReleaseEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        dragging = false; // Sürüklemeyi durdur
+        draggingHue = false;
+        draggingSaturation = false;
+        draggingBrightness = false; // Sürüklemeyi durdur
         update(); // Yenile
     }
 }
 
 void HSBColorWheel::updateColor(const QPoint &pos)
 {
-    if (hueRect.contains(pos)) {
-        updateHue(pos);
-    } else if (saturationRect.contains(pos)) {
-        updateSaturation(pos);
-    } else if (brightnessRect.contains(pos)) {
-        updateBrightness(pos);
-    }
-     QColor newColor = hsbToRgb(currentHue, currentSaturation, currentBrightness);
-     core->HSBcolor = qColorToScalar(newColor);
-     emit colorChanged(newColor);
-     qDebug() << "Yeni Renk Scalar: B=" << core->HSBcolor[0] << " G=" << core->HSBcolor[1] << " R=" << core->HSBcolor[2];
+    QColor newColor = hsbToRgb(currentHue, currentSaturation, currentBrightness);
+    core->HSBcolor = qColorToScalar(newColor);
+    emit colorChanged(newColor);
+    qDebug() << "Yeni Renk Scalar: B=" << core->HSBcolor[0] << " G=" << core->HSBcolor[1] << " R=" << core->HSBcolor[2];
 
 }
 
@@ -100,8 +124,6 @@ void HSBColorWheel::updateHue(const QPoint &pos)
     int hue = (pos.x() * 360) / width();
     currentHue = qBound(0, hue, 360);
     emit hueChanged(currentHue);
-
-
     update();
 }
 
@@ -145,11 +167,6 @@ QColor HSBColorWheel::hsbToRgb(int h, int s, int v)
         default: r = v; g = p; b = q; break; // Mor'dan Kırmızıya
         }
 
-        // Saturation ve brightness'a göre rengi ayarlayın
-        // Eğer tam kırmızı istiyorsanız, saturation ve brightness 255 olmalı
-        if (h == 0 && s == 255 && v == 255) {
-            return QColor(255, 0, 0); // Tam kırmızı
-        }
     }
 
     // RGB değerlerini sınırlandırarak geri döndür
