@@ -145,32 +145,33 @@ void HSBColorWheel::updateBrightness(const QPoint &pos)
 
 QColor HSBColorWheel::hsbToRgb(int h, int s, int v)
 {
-    int r, g, b;
+    float r, g, b;
 
-    // Eğer saturation 0 ise, gri tonlar döndür
+    // Saturation 0 ise, gri tonlar döndür (achromatic)
     if (s == 0) {
-        r = g = b = v;
+        r = g = b = v / 255.0;  // Doğrudan parlaklık
     } else {
-        // Hue değerini 0-360 arasında tutun
-        int hf = h / 60; // hue kısmını 60'a böl
-        int p = (v * (255 - s)) / 255; // Koyu ton
-        int q = (v * (255 - (s * (h % 60)) / 255)) / 255; // Orta ton
-        int t = (v * (255 - (s * (60 - (h % 60))) / 255)) / 255; // Açık ton
+        float hf = h / 60.0;  // Hue'yu 60'a böl, sektör belirleme
+        int i = (int)hf;      // Hangi sektör
+        float f = hf - i;     // Sektördeki yer (kesirli kısım)
+        float p = v * (1.0 - s / 255.0); // Daha koyu ton
+        float q = v * (1.0 - s / 255.0 * f);  // Orta ton
+        float t = v * (1.0 - s / 255.0 * (1.0 - f));  // Daha açık ton
 
-        // Kırmızı rengini tam vermek için hue 0 olduğunda
-        switch (hf) {
-        case 0: r = v; g = t; b = p; break; // Kırmızıdan Sarıya
-        case 1: r = q; g = v; b = p; break; // Sarıdan Yeşile
-        case 2: r = p; g = v; b = t; break; // Yeşilden Ciyane
-        case 3: r = p; g = q; b = v; break; // Ciyandan Maviye
-        case 4: r = t; g = p; b = v; break; // Maviden Mor'a
+        switch (i) {
+        case 0: r = v; g = t; b = p; break;  // Kırmızıdan Sarıya
+        case 1: r = q; g = v; b = p; break;  // Sarıdan Yeşile
+        case 2: r = p; g = v; b = t; break;  // Yeşilden Ciyane
+        case 3: r = p; g = q; b = v; break;  // Ciyandan Maviye
+        case 4: r = t; g = p; b = v; break;  // Maviden Mora
         default: r = v; g = p; b = q; break; // Mor'dan Kırmızıya
         }
-
     }
 
-    // RGB değerlerini sınırlandırarak geri döndür
-    return QColor(qBound(0, r, 255), qBound(0, g, 255), qBound(0, b, 255)); // 0-255 aralığına kısıtlama
+    // RGB değerlerini sınırlandır ve geri döndür
+    return QColor(qBound(0, (int)(r + 0.5), 255),
+                  qBound(0, (int)(g + 0.5), 255),
+                  qBound(0, (int)(b + 0.5), 255));
 }
 
 cv::Scalar HSBColorWheel::qColorToScalar(const QColor& color)
