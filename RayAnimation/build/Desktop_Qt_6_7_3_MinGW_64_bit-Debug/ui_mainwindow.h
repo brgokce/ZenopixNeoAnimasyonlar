@@ -43,8 +43,8 @@ public:
     QLabel *labelray;
     QWidget *gridLayoutWidget_2;
     QGridLayout *gridLayout_2;
-    QSlider *horizontalSlider_3;
     QSlider *horizontalSlider_2;
+    QSlider *horizontalSlider_3;
     QSlider *horizontalSlider;
     QWidget *gridLayoutWidget;
     QGridLayout *gridLayout;
@@ -72,7 +72,7 @@ public:
         Screen->setGeometry(QRect(10, 170, 371, 221));
         radioButton = new QRadioButton(centralwidget);
         radioButton->setObjectName("radioButton");
-        radioButton->setGeometry(QRect(490, 30, 111, 18));
+        radioButton->setGeometry(QRect(270, 10, 111, 18));
         horizontalSlider_4 = new QSlider(centralwidget);
         horizontalSlider_4->setObjectName("horizontalSlider_4");
         horizontalSlider_4->setGeometry(QRect(10, 100, 281, 21));
@@ -85,10 +85,10 @@ public:
         label_6->setGeometry(QRect(300, 100, 81, 16));
         label_7 = new QLabel(centralwidget);
         label_7->setObjectName("label_7");
-        label_7->setGeometry(QRect(520, 10, 201, 20));
+        label_7->setGeometry(QRect(300, -10, 201, 20));
         radioButton_2 = new QRadioButton(centralwidget);
         radioButton_2->setObjectName("radioButton_2");
-        radioButton_2->setGeometry(QRect(620, 30, 111, 18));
+        radioButton_2->setGeometry(QRect(400, 10, 111, 18));
         spinBox_2 = new QSpinBox(centralwidget);
         spinBox_2->setObjectName("spinBox_2");
         spinBox_2->setGeometry(QRect(110, 50, 91, 22));
@@ -114,21 +114,21 @@ public:
         gridLayout_2 = new QGridLayout(gridLayoutWidget_2);
         gridLayout_2->setObjectName("gridLayout_2");
         gridLayout_2->setContentsMargins(0, 0, 0, 0);
-        horizontalSlider_3 = new QSlider(gridLayoutWidget_2);
-        horizontalSlider_3->setObjectName("horizontalSlider_3");
-        horizontalSlider_3->setMaximum(255);
-        horizontalSlider_3->setValue(255);
-        horizontalSlider_3->setOrientation(Qt::Orientation::Horizontal);
-
-        gridLayout_2->addWidget(horizontalSlider_3, 1, 0, 1, 1);
-
         horizontalSlider_2 = new QSlider(gridLayoutWidget_2);
         horizontalSlider_2->setObjectName("horizontalSlider_2");
         horizontalSlider_2->setMaximum(255);
         horizontalSlider_2->setValue(255);
         horizontalSlider_2->setOrientation(Qt::Orientation::Horizontal);
 
-        gridLayout_2->addWidget(horizontalSlider_2, 0, 0, 1, 1);
+        gridLayout_2->addWidget(horizontalSlider_2, 1, 0, 1, 1);
+
+        horizontalSlider_3 = new QSlider(gridLayoutWidget_2);
+        horizontalSlider_3->setObjectName("horizontalSlider_3");
+        horizontalSlider_3->setMaximum(255);
+        horizontalSlider_3->setValue(255);
+        horizontalSlider_3->setOrientation(Qt::Orientation::Horizontal);
+
+        gridLayout_2->addWidget(horizontalSlider_3, 2, 0, 1, 1);
 
         horizontalSlider = new QSlider(gridLayoutWidget_2);
         horizontalSlider->setObjectName("horizontalSlider");
@@ -140,7 +140,7 @@ public:
 
         gridLayoutWidget = new QWidget(centralwidget);
         gridLayoutWidget->setObjectName("gridLayoutWidget");
-        gridLayoutWidget->setGeometry(QRect(450, 70, 361, 151));
+        gridLayoutWidget->setGeometry(QRect(450, 40, 361, 181));
         gridLayout = new QGridLayout(gridLayoutWidget);
         gridLayout->setObjectName("gridLayout");
         gridLayout->setContentsMargins(0, 0, 0, 0);

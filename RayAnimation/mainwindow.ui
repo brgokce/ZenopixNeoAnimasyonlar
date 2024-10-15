@@ -62,8 +62,8 @@
    <widget class="QRadioButton" name="radioButton">
     <property name="geometry">
      <rect>
-      <x>490</x>
-      <y>30</y>
+      <x>270</x>
+      <y>10</y>
       <width>111</width>
       <height>18</height>
      </rect>
@@ -110,8 +110,8 @@
    <widget class="QLabel" name="label_7">
     <property name="geometry">
      <rect>
-      <x>520</x>
-      <y>10</y>
+      <x>300</x>
+      <y>-10</y>
       <width>201</width>
       <height>20</height>
      </rect>
@@ -123,8 +123,8 @@
    <widget class="QRadioButton" name="radioButton_2">
     <property name="geometry">
      <rect>
-      <x>620</x>
-      <y>30</y>
+      <x>400</x>
+      <y>10</y>
       <width>111</width>
       <height>18</height>
      </rect>
@@ -215,7 +215,7 @@
     </property>
     <layout class="QGridLayout" name="gridLayout_2">
      <item row="1" column="0">
-      <widget class="QSlider" name="horizontalSlider_3">
+      <widget class="QSlider" name="horizontalSlider_2">
        <property name="maximum">
         <number>255</number>
        </property>
@@ -227,8 +227,8 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
-      <widget class="QSlider" name="horizontalSlider_2">
+     <item row="2" column="0">
+      <widget class="QSlider" name="horizontalSlider_3">
        <property name="maximum">
         <number>255</number>
        </property>
@@ -259,9 +259,9 @@
     <property name="geometry">
      <rect>
       <x>450</x>
-      <y>70</y>
+      <y>40</y>
       <width>361</width>
-      <height>151</height>
+      <height>181</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout"/>

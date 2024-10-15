@@ -14,7 +14,7 @@ public:
     explicit RGBColorWidget(QWidget *parent = nullptr);
 
 signals:
-     void colorChanged(int r, int g, int b);
+     void colorChanged(int r, int g, int b, int alpha);
 
 protected:
      void paintEvent(QPaintEvent *event) override; // Çizim olayı
@@ -26,11 +26,16 @@ private:
      int rPosition; // Kırmızı kaydırıcı pozisyonu
      int gPosition; // Yeşil kaydırıcı pozisyonu
      int bPosition; // Mavi kaydırıcı pozisyonu
+     int alphaPosition;
+
      bool draggingR; // Kırmızı kaydırıcı için sürükleme durumu
      bool draggingG; // Yeşil kaydırıcı için sürükleme durumu
      bool draggingB; // Mavi kaydırıcı için sürükleme durumu
+     bool draggingAlpha;
 
      void drawSlider(QPainter &painter, int x, int channel, const QColor &color);
+     void drawAlphaSlider(QPainter &painter, int position);
+
 };
 
 #endif // RGBCOLORWIDGET_H

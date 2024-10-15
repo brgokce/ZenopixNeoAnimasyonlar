@@ -60,7 +60,7 @@ private slots:
     void onBrightnessChanged(int brightness);
 
 private slots:
-    void onRGBColorChanged(int r, int g, int b);
+    void onColorChanged(int r, int g, int b, int alpha);
 
 private:
     Ui::MainWindow *ui;

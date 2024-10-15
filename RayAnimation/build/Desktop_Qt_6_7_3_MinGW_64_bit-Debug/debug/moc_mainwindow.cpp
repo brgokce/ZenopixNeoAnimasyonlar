@@ -68,10 +68,11 @@ constexpr auto qt_meta_stringdata_CLASSMainWindowENDCLASS = QtMocHelpers::string
     "saturation",
     "onBrightnessChanged",
     "brightness",
-    "onRGBColorChanged",
+    "onColorChanged",
     "r",
     "g",
-    "b"
+    "b",
+    "alpha"
 );
 #else  // !QT_MOC_HAS_STRINGDATA
 #error "qtmochelpers.h not found or too old."
@@ -109,7 +110,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
       26,    1,  162,    2, 0x08,   28 /* Private */,
       28,    1,  165,    2, 0x08,   30 /* Private */,
       30,    1,  168,    2, 0x08,   32 /* Private */,
-      32,    3,  171,    2, 0x08,   34 /* Private */,
+      32,    4,  171,    2, 0x08,   34 /* Private */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::Int,    3,
@@ -129,7 +130,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
     QMetaType::Void, QMetaType::Int,   27,
     QMetaType::Void, QMetaType::Int,   29,
     QMetaType::Void, QMetaType::Int,   31,
-    QMetaType::Void, QMetaType::Int, QMetaType::Int, QMetaType::Int,   33,   34,   35,
+    QMetaType::Void, QMetaType::Int, QMetaType::Int, QMetaType::Int, QMetaType::Int,   33,   34,   35,   36,
 
        0        // eod
 };
@@ -193,8 +194,9 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         // method 'onBrightnessChanged'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<int, std::false_type>,
-        // method 'onRGBColorChanged'
+        // method 'onColorChanged'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
         QtPrivate::TypeAndForceComplete<int, std::false_type>,
         QtPrivate::TypeAndForceComplete<int, std::false_type>,
         QtPrivate::TypeAndForceComplete<int, std::false_type>
@@ -225,7 +227,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 14: _t->onHueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         case 15: _t->onSaturationChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         case 16: _t->onBrightnessChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 17: _t->onRGBColorChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[3]))); break;
+        case 17: _t->onColorChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[3])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[4]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {

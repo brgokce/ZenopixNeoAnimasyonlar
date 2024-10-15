@@ -90,7 +90,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(tabwidget, &QTabWidget::currentChanged, this, &MainWindow::onTabCWheel);
     connect(tabwidget, &QTabWidget::currentChanged, this, &MainWindow::onTabHSB);
 
-    //connect(rgbcolorwidget, &RGBColorWidget::colorChanged, this, &MainWindow::onRGBColorChanged);
+    connect(rgbcolorwidget, &RGBColorWidget::colorChanged, this, &MainWindow::onColorChanged);
 
     core->spinbox= ui->spinBox_3;
 
@@ -294,7 +294,7 @@ void MainWindow::onColorHovered(const QColor &color)
 
     //qDebug() << "Selected color:" << color;
 
-   // ui->coloscreen->setText("Hovered Color: " + color.name());
+    // ui->coloscreen->setText("Hovered Color: " + color.name());
 }
 
 void MainWindow::onColorSelected(const QColor &color)
@@ -383,13 +383,18 @@ void MainWindow::onTabHSB(int index)
     }
 }
 
-void MainWindow::onRGBColorChanged(int r, int g, int b)
+void MainWindow::onColorChanged(int r, int g, int b, int alpha)
 {
-    // Core'daki renk ayarlarını güncelle
-    core->rayanimset.color[0] = r; // Red
-    core->rayanimset.color[1] = g; // Green
-    core->rayanimset.color[2] = b; // Blue
+    core->rayanimset.color[0] = r;
+    core->rayanimset.color[1] = g;
+    core->rayanimset.color[2] = b;
+    core->rayanimset.color[3]= alpha;
 
-    // Işın animasyonundaki renkleri güncelle
-    updateRayColors();
+    QString colorText = QString("R: %1, G: %2, B: %3, A: %4").arg(r).arg(g).arg(b).arg(alpha);
+
+    qDebug()<<colorText;
+
+    core->rayanimset.useColorWheel = false;
+
+   updateRayColors();
 }
