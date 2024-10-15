@@ -4,7 +4,9 @@ release/hsbcolorwheel.o
 release/main.o
 release/mainwindow.o
 release/rayanimthread.o
+release/rgbcolorwidget.o
 release/moc_colorwheelwidget.o
 release/moc_hsbcolorwheel.o
 release/moc_mainwindow.o
 release/moc_rayanimthread.o
+release/moc_rgbcolorwidget.o

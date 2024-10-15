@@ -14,14 +14,16 @@ SOURCES += \
     hsbcolorwheel.cpp \
     main.cpp \
     mainwindow.cpp \
-    rayanimthread.cpp
+    rayanimthread.cpp \
+    rgbcolorwidget.cpp
 
 HEADERS += \
     colorwheelwidget.h \
     core.h \
     hsbcolorwheel.h \
     mainwindow.h \
-    rayanimthread.h
+    rayanimthread.h \
+    rgbcolorwidget.h
 
 FORMS += \
     mainwindow.ui

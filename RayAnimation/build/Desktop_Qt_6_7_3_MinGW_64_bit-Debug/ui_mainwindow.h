@@ -46,6 +46,8 @@ public:
     QSlider *horizontalSlider_3;
     QSlider *horizontalSlider_2;
     QSlider *horizontalSlider;
+    QWidget *gridLayoutWidget;
+    QGridLayout *gridLayout;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -70,7 +72,7 @@ public:
         Screen->setGeometry(QRect(10, 170, 371, 221));
         radioButton = new QRadioButton(centralwidget);
         radioButton->setObjectName("radioButton");
-        radioButton->setGeometry(QRect(460, 50, 111, 18));
+        radioButton->setGeometry(QRect(490, 30, 111, 18));
         horizontalSlider_4 = new QSlider(centralwidget);
         horizontalSlider_4->setObjectName("horizontalSlider_4");
         horizontalSlider_4->setGeometry(QRect(10, 100, 281, 21));
@@ -83,10 +85,10 @@ public:
         label_6->setGeometry(QRect(300, 100, 81, 16));
         label_7 = new QLabel(centralwidget);
         label_7->setObjectName("label_7");
-        label_7->setGeometry(QRect(490, 30, 201, 20));
+        label_7->setGeometry(QRect(520, 10, 201, 20));
         radioButton_2 = new QRadioButton(centralwidget);
         radioButton_2->setObjectName("radioButton_2");
-        radioButton_2->setGeometry(QRect(590, 50, 111, 18));
+        radioButton_2->setGeometry(QRect(620, 30, 111, 18));
         spinBox_2 = new QSpinBox(centralwidget);
         spinBox_2->setObjectName("spinBox_2");
         spinBox_2->setGeometry(QRect(110, 50, 91, 22));
@@ -108,7 +110,7 @@ public:
         labelray->setGeometry(QRect(10, 30, 81, 16));
         gridLayoutWidget_2 = new QWidget(centralwidget);
         gridLayoutWidget_2->setObjectName("gridLayoutWidget_2");
-        gridLayoutWidget_2->setGeometry(QRect(430, 140, 371, 281));
+        gridLayoutWidget_2->setGeometry(QRect(450, 240, 371, 251));
         gridLayout_2 = new QGridLayout(gridLayoutWidget_2);
         gridLayout_2->setObjectName("gridLayout_2");
         gridLayout_2->setContentsMargins(0, 0, 0, 0);
@@ -136,6 +138,12 @@ public:
 
         gridLayout_2->addWidget(horizontalSlider, 0, 0, 1, 1);
 
+        gridLayoutWidget = new QWidget(centralwidget);
+        gridLayoutWidget->setObjectName("gridLayoutWidget");
+        gridLayoutWidget->setGeometry(QRect(450, 70, 361, 151));
+        gridLayout = new QGridLayout(gridLayoutWidget);
+        gridLayout->setObjectName("gridLayout");
+        gridLayout->setContentsMargins(0, 0, 0, 0);
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");

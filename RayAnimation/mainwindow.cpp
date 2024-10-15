@@ -18,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     hsbcolorwheel= new HSBColorWheel(core,this);
 
+    rgbcolorwidget= new RGBColorWidget(this);
+
     tabwidget = new QTabWidget(this);
 
     sliderTab = new QWidget();
@@ -32,6 +34,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     if (ui->gridLayout_2) {
         ui->gridLayout_2->addWidget(tabwidget);
+    }
+
+    if(ui->gridLayout)
+    {
+        ui->gridLayout->addWidget(rgbcolorwidget);
     }
 
     hsbcolorwheel->setHueText("Hue");
@@ -82,6 +89,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(tabwidget, &QTabWidget::currentChanged, this, &MainWindow::onTabChanged);
     connect(tabwidget, &QTabWidget::currentChanged, this, &MainWindow::onTabCWheel);
     connect(tabwidget, &QTabWidget::currentChanged, this, &MainWindow::onTabHSB);
+
+    //connect(rgbcolorwidget, &RGBColorWidget::colorChanged, this, &MainWindow::onRGBColorChanged);
 
     core->spinbox= ui->spinBox_3;
 
@@ -252,7 +261,6 @@ void MainWindow::updateRayColors()
         QColor color = hsbcolorwheel->hsbToRgb(currentHue, currentSaturation, currentBrightness);
         core->HSBcolor = hsbcolorwheel->qColorToScalar(color);
 
-
         if(core->rayanimset.useHSB)
         {
             cv::Scalar fixedColor(core->HSBcolor[0], core->HSBcolor[1], core->HSBcolor[2]); // BGR sırası
@@ -373,4 +381,15 @@ void MainWindow::onTabHSB(int index)
     {
 
     }
+}
+
+void MainWindow::onRGBColorChanged(int r, int g, int b)
+{
+    // Core'daki renk ayarlarını güncelle
+    core->rayanimset.color[0] = r; // Red
+    core->rayanimset.color[1] = g; // Green
+    core->rayanimset.color[2] = b; // Blue
+
+    // Işın animasyonundaki renkleri güncelle
+    updateRayColors();
 }

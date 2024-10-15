@@ -5,9 +5,11 @@
 #include "core.h"
 #include "hsbcolorwheel.h"
 #include "qboxlayout.h"
+#include "qpushbutton.h"
 #include "rayanimthread.h"
 #include "colorwheelwidget.h"
 #include "hsbcolorwheel.h"
+#include "rgbcolorwidget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -57,6 +59,8 @@ private slots:
     void onSaturationChanged(int saturation);
     void onBrightnessChanged(int brightness);
 
+private slots:
+    void onRGBColorChanged(int r, int g, int b);
 
 private:
     Ui::MainWindow *ui;
@@ -75,6 +79,9 @@ private:
     void onTabHSB(int index);
     QVBoxLayout *sliderLayout;
     QWidget *sliderTab;
+    RGBColorWidget *rgbcolorwidget;
+
+    QPushButton *updateColorButton;
 
 };
 #endif // MAINWINDOW_H
