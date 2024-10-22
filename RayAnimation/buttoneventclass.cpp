@@ -6,7 +6,7 @@
 buttonEventClass::buttonEventClass(int *parentWdt, QWidget *parent)
     : QPushButton(parent), dragging(false)
 {
-    setFixedSize(40, 180);
+    setFixedSize(30, 180);
     setStyleSheet("background-color:rgba(0,0,0,0);");
 
     parentWidth= parentWdt;
