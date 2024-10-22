@@ -43,11 +43,11 @@ public:
     QLabel *labelray;
     QWidget *gridLayoutWidget_2;
     QGridLayout *gridLayout_2;
-    QSlider *horizontalSlider_2;
-    QSlider *horizontalSlider_3;
-    QSlider *horizontalSlider;
     QWidget *gridLayoutWidget;
     QGridLayout *gridLayout;
+    QSlider *horizontalSlider;
+    QSlider *horizontalSlider_2;
+    QSlider *horizontalSlider_3;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -110,40 +110,34 @@ public:
         labelray->setGeometry(QRect(10, 30, 81, 16));
         gridLayoutWidget_2 = new QWidget(centralwidget);
         gridLayoutWidget_2->setObjectName("gridLayoutWidget_2");
-        gridLayoutWidget_2->setGeometry(QRect(450, 240, 371, 251));
+        gridLayoutWidget_2->setGeometry(QRect(460, 240, 301, 251));
         gridLayout_2 = new QGridLayout(gridLayoutWidget_2);
         gridLayout_2->setObjectName("gridLayout_2");
         gridLayout_2->setContentsMargins(0, 0, 0, 0);
-        horizontalSlider_2 = new QSlider(gridLayoutWidget_2);
-        horizontalSlider_2->setObjectName("horizontalSlider_2");
-        horizontalSlider_2->setMaximum(255);
-        horizontalSlider_2->setValue(255);
-        horizontalSlider_2->setOrientation(Qt::Orientation::Horizontal);
-
-        gridLayout_2->addWidget(horizontalSlider_2, 1, 0, 1, 1);
-
-        horizontalSlider_3 = new QSlider(gridLayoutWidget_2);
-        horizontalSlider_3->setObjectName("horizontalSlider_3");
-        horizontalSlider_3->setMaximum(255);
-        horizontalSlider_3->setValue(255);
-        horizontalSlider_3->setOrientation(Qt::Orientation::Horizontal);
-
-        gridLayout_2->addWidget(horizontalSlider_3, 2, 0, 1, 1);
-
-        horizontalSlider = new QSlider(gridLayoutWidget_2);
-        horizontalSlider->setObjectName("horizontalSlider");
-        horizontalSlider->setMaximum(255);
-        horizontalSlider->setValue(255);
-        horizontalSlider->setOrientation(Qt::Orientation::Horizontal);
-
-        gridLayout_2->addWidget(horizontalSlider, 0, 0, 1, 1);
-
         gridLayoutWidget = new QWidget(centralwidget);
         gridLayoutWidget->setObjectName("gridLayoutWidget");
-        gridLayoutWidget->setGeometry(QRect(450, 40, 361, 181));
+        gridLayoutWidget->setGeometry(QRect(460, 60, 361, 161));
         gridLayout = new QGridLayout(gridLayoutWidget);
         gridLayout->setObjectName("gridLayout");
         gridLayout->setContentsMargins(0, 0, 0, 0);
+        horizontalSlider = new QSlider(centralwidget);
+        horizontalSlider->setObjectName("horizontalSlider");
+        horizontalSlider->setGeometry(QRect(10, 130, 369, 15));
+        horizontalSlider->setMaximum(255);
+        horizontalSlider->setValue(255);
+        horizontalSlider->setOrientation(Qt::Orientation::Horizontal);
+        horizontalSlider_2 = new QSlider(centralwidget);
+        horizontalSlider_2->setObjectName("horizontalSlider_2");
+        horizontalSlider_2->setGeometry(QRect(10, 140, 369, 15));
+        horizontalSlider_2->setMaximum(255);
+        horizontalSlider_2->setValue(255);
+        horizontalSlider_2->setOrientation(Qt::Orientation::Horizontal);
+        horizontalSlider_3 = new QSlider(centralwidget);
+        horizontalSlider_3->setObjectName("horizontalSlider_3");
+        horizontalSlider_3->setGeometry(QRect(460, 30, 369, 15));
+        horizontalSlider_3->setMaximum(255);
+        horizontalSlider_3->setValue(255);
+        horizontalSlider_3->setOrientation(Qt::Orientation::Horizontal);
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");

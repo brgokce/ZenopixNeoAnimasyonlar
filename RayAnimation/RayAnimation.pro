@@ -9,21 +9,23 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    buttoneventclass.cpp \
     colorwheelwidget.cpp \
     core.cpp \
     hsbcolorwheel.cpp \
+    labelclass.cpp \
     main.cpp \
     mainwindow.cpp \
-    rayanimthread.cpp \
-    rgbcolorwidget.cpp
+    rayanimthread.cpp
 
 HEADERS += \
+    buttoneventclass.h \
     colorwheelwidget.h \
     core.h \
     hsbcolorwheel.h \
+    labelclass.h \
     mainwindow.h \
-    rayanimthread.h \
-    rgbcolorwidget.h
+    rayanimthread.h
 
 FORMS += \
     mainwindow.ui

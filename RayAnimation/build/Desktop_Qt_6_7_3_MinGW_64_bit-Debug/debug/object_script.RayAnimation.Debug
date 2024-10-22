@@ -1,12 +1,14 @@
+debug/buttoneventclass.o
 debug/colorwheelwidget.o
 debug/core.o
 debug/hsbcolorwheel.o
+debug/labelclass.o
 debug/main.o
 debug/mainwindow.o
 debug/rayanimthread.o
-debug/rgbcolorwidget.o
+debug/moc_buttoneventclass.o
 debug/moc_colorwheelwidget.o
 debug/moc_hsbcolorwheel.o
+debug/moc_labelclass.o
 debug/moc_mainwindow.o
 debug/moc_rayanimthread.o
-debug/moc_rgbcolorwidget.o

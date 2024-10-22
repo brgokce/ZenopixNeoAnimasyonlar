@@ -51,6 +51,22 @@ public:
         QVector<DynamicRayAnimSet> Ray_Lines;
 
     };
+
+    struct RGBWidgetValues
+    {
+        uint8_t RWidgetValue=0;
+        uint8_t GWidgetValue=0;
+        uint8_t BWidgetValue=0;
+
+
+        QImage Rimage = QImage(256,1, QImage::Format_RGB16);
+        QImage GImage = QImage(256,1,QImage::Format_RGB16);
+        QImage BImage = QImage(256,1,QImage::Format_RGB16);
+
+    };
+
+    RGBWidgetValues rgbWidgetValues;
+
     RayAnimationSettings rayanimset;
     cv::Mat Img;
     QSpinBox* spinbox;

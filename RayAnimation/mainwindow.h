@@ -4,12 +4,14 @@
 #include <QMainWindow>
 #include "core.h"
 #include "hsbcolorwheel.h"
+#include "labelclass.h"
 #include "qboxlayout.h"
 #include "qpushbutton.h"
 #include "rayanimthread.h"
 #include "colorwheelwidget.h"
 #include "hsbcolorwheel.h"
-#include "rgbcolorwidget.h"
+
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -25,6 +27,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+signals:
+    int rgbValueChanged();
 
 private slots:
     void on_spinBox_valueChanged(int arg1);
@@ -49,7 +53,10 @@ private slots:
 
     void on_spinBox_3_valueChanged(int arg1);
 
-    void createColorSlider(QVBoxLayout *layout, const QString &labelText, QSlider *slider);
+    void onRedValueChanged(int value);
+    void onGreenValueChanged(int value);
+    void onBlueValueChanged(int value);
+
 
 private slots:
     void onColorHovered(const QColor &color);
@@ -59,8 +66,6 @@ private slots:
     void onSaturationChanged(int saturation);
     void onBrightnessChanged(int brightness);
 
-private slots:
-    void onColorChanged(int r, int g, int b, int alpha);
 
 private:
     Ui::MainWindow *ui;
@@ -79,9 +84,11 @@ private:
     void onTabHSB(int index);
     QVBoxLayout *sliderLayout;
     QWidget *sliderTab;
-    RGBColorWidget *rgbcolorwidget;
+    labelCLASS *labels;
 
-    QPushButton *updateColorButton;
+    QLabel *rLabel, *gLabel, *bLabel;
+
+    void UpdateRGB();
 
 };
 #endif // MAINWINDOW_H

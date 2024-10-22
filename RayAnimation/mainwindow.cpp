@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     hsbcolorwheel= new HSBColorWheel(core,this);
 
-    rgbcolorwidget= new RGBColorWidget(this);
+    labels = new labelCLASS(this);
 
     tabwidget = new QTabWidget(this);
 
@@ -28,17 +28,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     sliderLayout = new QVBoxLayout(sliderTab);
 
-    createColorSlider(sliderLayout, "R", ui->horizontalSlider);
-    createColorSlider(sliderLayout, "G", ui->horizontalSlider_2);
-    createColorSlider(sliderLayout, "B", ui->horizontalSlider_3);
+   sliderLayout->addWidget(labels);
 
     if (ui->gridLayout_2) {
         ui->gridLayout_2->addWidget(tabwidget);
-    }
-
-    if(ui->gridLayout)
-    {
-        ui->gridLayout->addWidget(rgbcolorwidget);
     }
 
     hsbcolorwheel->setHueText("Hue");
@@ -58,6 +51,10 @@ MainWindow::MainWindow(QWidget *parent)
     QLabel* brightnesslabel = hsbcolorwheel->getSaturationLabel();
     QVBoxLayout* layoutBrh = new QVBoxLayout();
     layoutBrh->addWidget(brightnesslabel);
+
+    rLabel= new labelCLASS(this);
+    gLabel= new labelCLASS(this);
+    bLabel= new labelCLASS(this);
 
     QWidget *hsbTab = new QWidget();
     QVBoxLayout *hsbLayout = new QVBoxLayout(hsbTab);
@@ -90,7 +87,11 @@ MainWindow::MainWindow(QWidget *parent)
     connect(tabwidget, &QTabWidget::currentChanged, this, &MainWindow::onTabCWheel);
     connect(tabwidget, &QTabWidget::currentChanged, this, &MainWindow::onTabHSB);
 
-    connect(rgbcolorwidget, &RGBColorWidget::colorChanged, this, &MainWindow::onColorChanged);
+    //connect(rLabel,SIGNAL(ValueChanged(int value)), this, SLOT(onRedValueChanged));
+
+    //connect(gLabel, SIGNAL(ValueChanged(int value)), this, SLOT(onGreenValueChanged(int)));
+
+    //connect(bLabel, SIGNAL(ValueChanged(int value)), this, SLOT(onBlueValueChanged(int)));
 
     core->spinbox= ui->spinBox_3;
 
@@ -103,15 +104,58 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
-
-void MainWindow::createColorSlider(QVBoxLayout *layout, const QString &labelText, QSlider *slider)
+void MainWindow::onRedValueChanged(int value)
 {
-    QHBoxLayout *hLayout = new QHBoxLayout();
-    QLabel *label = new QLabel(labelText, this);
-    hLayout->addWidget(label);
-    hLayout->addWidget(slider);
-    layout->addLayout(hLayout);
+    core->rgbWidgetValues.RWidgetValue= value;
+    UpdateRGB();
+}
+
+void MainWindow::onGreenValueChanged(int value)
+{
+    core->rgbWidgetValues.GWidgetValue= value;
+    UpdateRGB();
+}
+
+void MainWindow::onBlueValueChanged(int value)
+{
+    core->rgbWidgetValues.BWidgetValue= value;
+    UpdateRGB();
+}
+
+void MainWindow::UpdateRGB()
+{
+    uint8_t rowR,rowG,rowB;
+
+    for(int row=0; row<256; row++)
+    {
+        rowR= row;
+        rowG= core->rgbWidgetValues.GWidgetValue;
+        rowB= core->rgbWidgetValues.BWidgetValue;
+
+        if (row < core->rgbWidgetValues.Rimage.height())
+        {
+
+        core->rgbWidgetValues.Rimage.setPixelColor(0, row, QColor(rowR, rowG, rowB));
+        }
+
+        rowR= core->rgbWidgetValues.RWidgetValue;
+        rowG= row;
+        rowB= core->rgbWidgetValues.BWidgetValue;
+
+        if (row < core->rgbWidgetValues.GImage.height())
+        {
+          core->rgbWidgetValues.GImage.setPixelColor(0,row, QColor(rowR, rowG, rowB));
+        }
+
+        rowR= core->rgbWidgetValues.RWidgetValue;
+        rowG= core->rgbWidgetValues.GWidgetValue;
+        rowB= row;
+
+        if (row < core->rgbWidgetValues.BImage.height())
+        {
+          core->rgbWidgetValues.BImage.setPixelColor(0, row, QColor(rowR, rowG, rowB));
+        }
+    }
 }
 
 void MainWindow::on_spinBox_valueChanged(int arg1)
@@ -381,20 +425,4 @@ void MainWindow::onTabHSB(int index)
     {
 
     }
-}
-
-void MainWindow::onColorChanged(int r, int g, int b, int alpha)
-{
-    core->rayanimset.color[0] = r;
-    core->rayanimset.color[1] = g;
-    core->rayanimset.color[2] = b;
-    core->rayanimset.color[3]= alpha;
-
-    QString colorText = QString("R: %1, G: %2, B: %3, A: %4").arg(r).arg(g).arg(b).arg(alpha);
-
-    qDebug()<<colorText;
-
-    core->rayanimset.useColorWheel = false;
-
-   updateRayColors();
 }
