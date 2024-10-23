@@ -129,7 +129,7 @@ void MainWindow::onRedValueChanged(int value)
     qDebug() << "onRedValueChanged tetiklendi, değer: " << value;
 
     core->RGBcolor[2]= value;
-    updateRayColors();
+    updateRayRGBColors();
 
 }
 
@@ -144,7 +144,7 @@ void MainWindow::onGreenValueChanged(int value)
     qDebug() << "onGreenValueChanged tetiklendi, değer: " << value;
 
     core->RGBcolor[1]= value;
-    updateRayColors();
+    updateRayRGBColors();
 
 }
 
@@ -159,7 +159,7 @@ void MainWindow::onBlueValueChanged(int value)
     qDebug() << "onBlueValueChanged tetiklendi, değer: " << value;
 
     core->RGBcolor[0]= value;
-    updateRayColors();
+    updateRayRGBColors();
 }
 
 void MainWindow::UpdateRGB()
@@ -268,6 +268,8 @@ void MainWindow::on_radioButton_2_clicked()
     else
     {
         core->rayanimset.useColorWheel=true;
+        core->rayanimset.useRGB= false;
+        core->rayanimset.useHSB=false;
     }
 }
 
@@ -356,27 +358,19 @@ void MainWindow::updateRayColors()
             for (int i = 0; i < core->rayanimset.Ray_Lines.size(); ++i)
             {
                 core->rayanimset.Ray_Lines[i].dColor = fixedColor; // Sabit renk kullan
-            }
-        }
-
-        else if(core->rayanimset.useRGB)
-        {
-            cv::Scalar fixedColor(core->RGBcolor[0], core->RGBcolor[1], core->RGBcolor[2]); // BGR sırası
-            for (int i = 0; i < core->rayanimset.Ray_Lines.size(); ++i)
-            {
-                core->rayanimset.Ray_Lines[i].dColor = fixedColor; // Sabit renk kullan
+                core->rayanimset.useRGB= false;
+                core->rayanimset.useColorWheel = false;
             }
         }
 
         else
         {
-            core->rayanimset.useHSB= false;
-            core->rayanimset.useRGB=true;
+            core->rayanimset.useColorWheel = true;
 
             cv::Scalar fixedColor(core->rayanimset.color[2], core->rayanimset.color[1], core->rayanimset.color[0]); // BGR sırası
             for (int i = 0; i < core->rayanimset.Ray_Lines.size(); ++i)
             {
-                core->rayanimset.Ray_Lines[i].dColor = fixedColor; // Sabit renk kullan
+                core->rayanimset.Ray_Lines[i].dColor = fixedColor;
             }
         }
 
@@ -384,6 +378,25 @@ void MainWindow::updateRayColors()
 
     rayAnimthread->updateColors();
 
+}
+
+void MainWindow::updateRayRGBColors()
+{
+  if (!core->rayanimset.randomColorEnable) // Sabit renk aktifse
+  {
+     if(core->rayanimset.useRGB)
+      {
+
+        cv::Scalar fixedColor(core->RGBcolor[0], core->RGBcolor[1], core->RGBcolor[2]); // BGR sırası
+        for (int i = 0; i < core->rayanimset.Ray_Lines.size(); ++i)
+        {
+            core->rayanimset.Ray_Lines[i].dColor = fixedColor; // Sabit renk kullan
+            core->rayanimset.useHSB= false;
+            core->rayanimset.useColorWheel = false;
+        }
+      }
+  }
+    rayAnimthread->updateColors();
 }
 
 void MainWindow::onColorHovered(const QColor &color)
@@ -421,6 +434,7 @@ void MainWindow::onColorSelected(const QColor &color)
 
     core->rayanimset.useColorWheel=true;
     core->rayanimset.useHSB=false;
+    core->RGBcolor= false;
 
     ui->horizontalSlider->setValue(red);
     ui->horizontalSlider_2->setValue(green);
@@ -444,6 +458,7 @@ void MainWindow::onSaturationChanged(int saturation)
     if (core->rayanimset.lastSaturation != saturation) {
         core->rayanimset.lastSaturation = saturation;
         core->rayanimset.useHSB = true;
+        core->RGBcolor= false;
         updateRayColors();  // Update colors when saturation changes
     }
     qDebug() << "Saturation: " << saturation;
@@ -454,6 +469,7 @@ void MainWindow::onBrightnessChanged(int brightness)
     if (core->rayanimset.lastBrightness != brightness) {
         core->rayanimset.lastBrightness = brightness;
         core->rayanimset.useHSB = true;
+        core->RGBcolor= false;
         updateRayColors();  // Update colors when brightness changes
     }
     qDebug() << "Brightness: " << brightness;

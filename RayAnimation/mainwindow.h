@@ -79,6 +79,7 @@ private:
     QImage matToImage(const cv::Mat &mat) const noexcept;
     void checkRadioButtonState();
     void updateRayColors();
+    void updateRayRGBColors();
     void updateSpinBoxLimits(int minValue, int maxValue);
     ColorWheelWidget *colorWheel;
     HSBColorWheel* hsbcolorwheel;
