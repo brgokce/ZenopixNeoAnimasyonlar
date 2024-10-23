@@ -1,8 +1,5 @@
 #ifndef BUTTONEVENTCLASS_H
 #define BUTTONEVENTCLASS_H
-
-
-
 #include "qpushbutton.h"
 #include <QObject>
 #include <QWidget>
@@ -19,23 +16,18 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
     void leaveEvent(QEvent *event) override;
 
-
 signals:
     void ButtonvalueChanged(int value);
     void buttonPositionChanged(int x, int y);
-
-
+    void itemReleased();
 
 private:
-    int XB, Wb;
     bool dragging;
     int DeltaX, DeltaY, currentValue;
     QPoint PreviousPos, currentPos;
     int *parentWidth;
-    QTimer *updateTimer;
-    float lerpFactor;
-
-    void smoothMove();
+    bool moveState= false;
+    bool pressed= false;
 };
 
 #endif // BUTTONEVENTCLASS_H

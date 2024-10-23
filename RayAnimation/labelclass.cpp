@@ -9,7 +9,6 @@ labelCLASS::labelCLASS(QWidget *parent)
 {
     Lbutton= new buttonEventClass(&parentwidth, this);
     connect(Lbutton, &buttonEventClass::buttonPositionChanged, this, &labelCLASS::updateButtonPosition);
-    Lbutton->setStyleSheet("background-color:rgba(0,0,0,0);");
     this->setFixedWidth(256);
 }
 
@@ -21,13 +20,13 @@ void labelCLASS::updateButtonPosition(int globalX, int globalY)
 
     double theta= qAtan(255.0/(width()-Lbutton->width()));
 
-    ChannelColor= static_cast<int>(abs(XB) * qTan(theta));
+    double rawChannelColor = abs(XB) * qTan(theta);
+
+    ChannelColor = static_cast<int>((rawChannelColor /255.0) * 256);
 
     emit ValueChanged(ChannelColor);
 
     qDebug()<<"değer xb:"<<XB;
-
-    qDebug()<<"değer xb:"<<width();
 
     qDebug()<<"değer:"<<ChannelColor;
 }

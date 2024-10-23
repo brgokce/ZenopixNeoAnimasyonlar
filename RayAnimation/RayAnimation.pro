@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     buttoneventclass.cpp \
+    channellabel.cpp \
     colorwheelwidget.cpp \
     core.cpp \
     hsbcolorwheel.cpp \
@@ -20,6 +21,7 @@ SOURCES += \
 
 HEADERS += \
     buttoneventclass.h \
+    channellabel.h \
     colorwheelwidget.h \
     core.h \
     hsbcolorwheel.h \

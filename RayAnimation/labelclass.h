@@ -1,6 +1,5 @@
 #ifndef LABELCLASS_H
 #define LABELCLASS_H
-
 #include "buttoneventclass.h"
 #include "qlabel.h"
 #include "qpushbutton.h"
@@ -23,7 +22,7 @@ public slots:
 private:
     buttonEventClass* Lbutton;
     int ChannelColor, XB;
-    int parentwidth=257;
+    int parentwidth=255;
 };
 
 #endif // LABELCLASS_H

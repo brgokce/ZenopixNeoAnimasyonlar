@@ -42,6 +42,7 @@ public:
         bool userChangedSpeed = false;
         bool useColorWheel = false;
         bool useHSB=false;
+        bool useRGB= false;
         int brightness=0;
 
         int lastHue = -1;
@@ -59,9 +60,9 @@ public:
         uint8_t BWidgetValue=0;
 
 
-        QImage Rimage = QImage(256,1, QImage::Format_RGB16);
-        QImage GImage = QImage(256,1,QImage::Format_RGB16);
-        QImage BImage = QImage(256,1,QImage::Format_RGB16);
+        QImage Rimage = QImage(256,1, QImage::Format_RGB888);
+        QImage GImage = QImage(256,1,QImage::Format_RGB888);
+        QImage BImage = QImage(256,1,QImage::Format_RGB888);
 
     };
 
@@ -72,6 +73,7 @@ public:
     QSpinBox* spinbox;
     cv::Scalar currentRayColor;
     cv::Scalar HSBcolor;
+    cv::Scalar RGBcolor;
 
     cv::Scalar RandomColor();
 };

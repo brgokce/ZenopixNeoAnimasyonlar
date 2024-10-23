@@ -41,7 +41,8 @@ constexpr auto qt_meta_stringdata_CLASSbuttonEventClassENDCLASS = QtMocHelpers::
     "value",
     "buttonPositionChanged",
     "x",
-    "y"
+    "y",
+    "itemReleased"
 );
 #else  // !QT_MOC_HAS_STRINGDATA
 #error "qtmochelpers.h not found or too old."
@@ -54,20 +55,22 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSbuttonEventClassENDCLASS[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-       2,   14, // methods
+       3,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       2,       // signalCount
+       3,       // signalCount
 
  // signals: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,   26,    2, 0x06,    1 /* Public */,
-       4,    2,   29,    2, 0x06,    3 /* Public */,
+       1,    1,   32,    2, 0x06,    1 /* Public */,
+       4,    2,   35,    2, 0x06,    3 /* Public */,
+       7,    0,   40,    2, 0x06,    6 /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Int,    3,
     QMetaType::Void, QMetaType::Int, QMetaType::Int,    5,    6,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -87,7 +90,9 @@ Q_CONSTINIT const QMetaObject buttonEventClass::staticMetaObject = { {
         // method 'buttonPositionChanged'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
         QtPrivate::TypeAndForceComplete<int, std::false_type>,
-        QtPrivate::TypeAndForceComplete<int, std::false_type>
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
+        // method 'itemReleased'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
     nullptr
 } };
@@ -100,6 +105,7 @@ void buttonEventClass::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         switch (_id) {
         case 0: _t->ButtonvalueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         case 1: _t->buttonPositionChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
+        case 2: _t->itemReleased(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -115,6 +121,13 @@ void buttonEventClass::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
             using _t = void (buttonEventClass::*)(int , int );
             if (_t _q_method = &buttonEventClass::buttonPositionChanged; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
                 *result = 1;
+                return;
+            }
+        }
+        {
+            using _t = void (buttonEventClass::*)();
+            if (_t _q_method = &buttonEventClass::itemReleased; *reinterpret_cast<_t *>(_a[1]) == _q_method) {
+                *result = 2;
                 return;
             }
         }
@@ -140,13 +153,13 @@ int buttonEventClass::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 2)
+        if (_id < 3)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 3;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 2)
+        if (_id < 3)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 2;
+        _id -= 3;
     }
     return _id;
 }
@@ -163,5 +176,11 @@ void buttonEventClass::buttonPositionChanged(int _t1, int _t2)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);
+}
+
+// SIGNAL 2
+void buttonEventClass::itemReleased()
+{
+    QMetaObject::activate(this, &staticMetaObject, 2, nullptr);
 }
 QT_WARNING_POP

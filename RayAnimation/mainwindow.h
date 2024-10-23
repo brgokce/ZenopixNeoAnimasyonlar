@@ -1,6 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-
+#include <QScrollArea>
 #include <QMainWindow>
 #include "core.h"
 #include "hsbcolorwheel.h"
@@ -10,7 +10,7 @@
 #include "rayanimthread.h"
 #include "colorwheelwidget.h"
 #include "hsbcolorwheel.h"
-
+#include "channellabel.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -26,6 +26,13 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    ChannelLabel*rLabel;
+    ChannelLabel*gLabel;
+        ChannelLabel*bLabel;
+public slots:
+    void onRedValueChanged(int value);
+    void onGreenValueChanged(int value);
+    void onBlueValueChanged(int value);
 
 signals:
     int rgbValueChanged();
@@ -53,9 +60,6 @@ private slots:
 
     void on_spinBox_3_valueChanged(int arg1);
 
-    void onRedValueChanged(int value);
-    void onGreenValueChanged(int value);
-    void onBlueValueChanged(int value);
 
 
 private slots:
@@ -84,10 +88,7 @@ private:
     void onTabHSB(int index);
     QVBoxLayout *sliderLayout;
     QWidget *sliderTab;
-    labelCLASS *labels;
-
-    QLabel *rLabel, *gLabel, *bLabel;
-
+    QScrollArea* scrollArea;
     void UpdateRGB();
 
 };

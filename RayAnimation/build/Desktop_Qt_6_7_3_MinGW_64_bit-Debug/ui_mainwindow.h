@@ -110,7 +110,7 @@ public:
         labelray->setGeometry(QRect(10, 30, 81, 16));
         gridLayoutWidget_2 = new QWidget(centralwidget);
         gridLayoutWidget_2->setObjectName("gridLayoutWidget_2");
-        gridLayoutWidget_2->setGeometry(QRect(460, 240, 301, 251));
+        gridLayoutWidget_2->setGeometry(QRect(460, 240, 311, 251));
         gridLayout_2 = new QGridLayout(gridLayoutWidget_2);
         gridLayout_2->setObjectName("gridLayout_2");
         gridLayout_2->setContentsMargins(0, 0, 0, 0);

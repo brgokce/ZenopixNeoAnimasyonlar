@@ -1,4 +1,5 @@
 release/buttoneventclass.o
+release/channellabel.o
 release/colorwheelwidget.o
 release/core.o
 release/hsbcolorwheel.o
@@ -7,6 +8,7 @@ release/main.o
 release/mainwindow.o
 release/rayanimthread.o
 release/moc_buttoneventclass.o
+release/moc_channellabel.o
 release/moc_colorwheelwidget.o
 release/moc_hsbcolorwheel.o
 release/moc_labelclass.o

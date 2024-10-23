@@ -18,8 +18,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     hsbcolorwheel= new HSBColorWheel(core,this);
 
-    labels = new labelCLASS(this);
-
     tabwidget = new QTabWidget(this);
 
     sliderTab = new QWidget();
@@ -28,7 +26,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     sliderLayout = new QVBoxLayout(sliderTab);
 
-   sliderLayout->addWidget(labels);
+    scrollArea= new QScrollArea(sliderTab);
+
+    scrollArea->setFixedSize(334, 273);
+
 
     if (ui->gridLayout_2) {
         ui->gridLayout_2->addWidget(tabwidget);
@@ -52,9 +53,27 @@ MainWindow::MainWindow(QWidget *parent)
     QVBoxLayout* layoutBrh = new QVBoxLayout();
     layoutBrh->addWidget(brightnesslabel);
 
-    rLabel= new labelCLASS(this);
-    gLabel= new labelCLASS(this);
-    bLabel= new labelCLASS(this);
+    rLabel= new ChannelLabel(scrollArea);
+
+    rLabel->setGeometry(10,10,256,30);
+
+    rLabel->setScaledContents(true);
+
+    gLabel= new ChannelLabel(scrollArea);
+
+    gLabel->setScaledContents(true);
+
+    gLabel->setGeometry(10,79,256,30);
+
+    bLabel= new ChannelLabel(scrollArea);
+
+    bLabel->setGeometry(10,150,256,30);
+
+    bLabel->setScaledContents(true);
+
+    connect(rLabel, SIGNAL(ValueChanged(int)), this, SLOT(onRedValueChanged(int)));
+    connect(gLabel, SIGNAL(ValueChanged(int)), this, SLOT(onGreenValueChanged(int)));
+    connect(bLabel, SIGNAL(ValueChanged(int)), this, SLOT(onBlueValueChanged(int)));
 
     QWidget *hsbTab = new QWidget();
     QVBoxLayout *hsbLayout = new QVBoxLayout(hsbTab);
@@ -87,13 +106,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(tabwidget, &QTabWidget::currentChanged, this, &MainWindow::onTabCWheel);
     connect(tabwidget, &QTabWidget::currentChanged, this, &MainWindow::onTabHSB);
 
-    //connect(rLabel,SIGNAL(ValueChanged(int value)), this, SLOT(onRedValueChanged));
-
-    //connect(gLabel, SIGNAL(ValueChanged(int value)), this, SLOT(onGreenValueChanged(int)));
-
-    //connect(bLabel, SIGNAL(ValueChanged(int value)), this, SLOT(onBlueValueChanged(int)));
-
     core->spinbox= ui->spinBox_3;
+    UpdateRGB();
 
 }
 
@@ -106,56 +120,86 @@ MainWindow::~MainWindow()
 
 void MainWindow::onRedValueChanged(int value)
 {
+    core->rayanimset.useRGB= true;
+    core->rayanimset.useColorWheel = false;
+
     core->rgbWidgetValues.RWidgetValue= value;
     UpdateRGB();
+
+    qDebug() << "onRedValueChanged tetiklendi, değer: " << value;
+
+    core->RGBcolor[2]= value;
+    updateRayColors();
+
 }
 
 void MainWindow::onGreenValueChanged(int value)
 {
+    core->rayanimset.useRGB= true;
+    core->rayanimset.useColorWheel = false;
+
     core->rgbWidgetValues.GWidgetValue= value;
     UpdateRGB();
+
+    qDebug() << "onGreenValueChanged tetiklendi, değer: " << value;
+
+    core->RGBcolor[1]= value;
+    updateRayColors();
+
 }
 
 void MainWindow::onBlueValueChanged(int value)
 {
+    core->rayanimset.useRGB= true;
+    core->rayanimset.useColorWheel = false;
+
     core->rgbWidgetValues.BWidgetValue= value;
     UpdateRGB();
+
+    qDebug() << "onBlueValueChanged tetiklendi, değer: " << value;
+
+    core->RGBcolor[0]= value;
+    updateRayColors();
 }
 
 void MainWindow::UpdateRGB()
 {
-    uint8_t rowR,rowG,rowB;
+    uint8_t colR,colG,colB;
 
-    for(int row=0; row<256; row++)
+    core->rayanimset.useRGB= true;
+
+    for(int col=0; col<256; col++)
     {
-        rowR= row;
-        rowG= core->rgbWidgetValues.GWidgetValue;
-        rowB= core->rgbWidgetValues.BWidgetValue;
+        colR= col;
+        colG= core->rgbWidgetValues.GWidgetValue;
+        colB= core->rgbWidgetValues.BWidgetValue;
 
-        if (row < core->rgbWidgetValues.Rimage.height())
+        if (col < core->rgbWidgetValues.Rimage.width())
         {
-
-        core->rgbWidgetValues.Rimage.setPixelColor(0, row, QColor(rowR, rowG, rowB));
+            core->rgbWidgetValues.Rimage.setPixelColor(col, 0, QColor(colR, colG, colB));
         }
 
-        rowR= core->rgbWidgetValues.RWidgetValue;
-        rowG= row;
-        rowB= core->rgbWidgetValues.BWidgetValue;
+        colR= core->rgbWidgetValues.RWidgetValue;
+        colG= col;
+        colB= core->rgbWidgetValues.BWidgetValue;
 
-        if (row < core->rgbWidgetValues.GImage.height())
+        if (col < core->rgbWidgetValues.GImage.width())
         {
-          core->rgbWidgetValues.GImage.setPixelColor(0,row, QColor(rowR, rowG, rowB));
+            core->rgbWidgetValues.GImage.setPixelColor(col,0, QColor(colR, colG, colB));
         }
 
-        rowR= core->rgbWidgetValues.RWidgetValue;
-        rowG= core->rgbWidgetValues.GWidgetValue;
-        rowB= row;
+        colR= core->rgbWidgetValues.RWidgetValue;
+        colG= core->rgbWidgetValues.GWidgetValue;
+        colB= col;
 
-        if (row < core->rgbWidgetValues.BImage.height())
+        if (col < core->rgbWidgetValues.BImage.width())
         {
-          core->rgbWidgetValues.BImage.setPixelColor(0, row, QColor(rowR, rowG, rowB));
+            core->rgbWidgetValues.BImage.setPixelColor(col,0, QColor(colR, colG, colB));
         }
     }
+    rLabel->setPixmap(QPixmap::fromImage(core->rgbWidgetValues.Rimage));
+    gLabel->setPixmap(QPixmap::fromImage(core->rgbWidgetValues.GImage));
+    bLabel->setPixmap(QPixmap::fromImage(core->rgbWidgetValues.BImage));
 }
 
 void MainWindow::on_spinBox_valueChanged(int arg1)
@@ -213,6 +257,7 @@ void MainWindow::on_radioButton_2_clicked()
         ui->horizontalSlider->setEnabled(true); // Kırmızı slider'ı etkinleştir
         ui->horizontalSlider_2->setEnabled(true); // Yeşil slider'ı etkinleştir
         ui->horizontalSlider_3->setEnabled(true);
+        core->rayanimset.useRGB= true;
         updateRayColors();
     }
     else if(core->rayanimset.useHSB)
@@ -313,9 +358,21 @@ void MainWindow::updateRayColors()
                 core->rayanimset.Ray_Lines[i].dColor = fixedColor; // Sabit renk kullan
             }
         }
+
+        else if(core->rayanimset.useRGB)
+        {
+            cv::Scalar fixedColor(core->RGBcolor[0], core->RGBcolor[1], core->RGBcolor[2]); // BGR sırası
+            for (int i = 0; i < core->rayanimset.Ray_Lines.size(); ++i)
+            {
+                core->rayanimset.Ray_Lines[i].dColor = fixedColor; // Sabit renk kullan
+            }
+        }
+
         else
         {
             core->rayanimset.useHSB= false;
+            core->rayanimset.useRGB=true;
+
             cv::Scalar fixedColor(core->rayanimset.color[2], core->rayanimset.color[1], core->rayanimset.color[0]); // BGR sırası
             for (int i = 0; i < core->rayanimset.Ray_Lines.size(); ++i)
             {
@@ -352,7 +409,6 @@ void MainWindow::onColorSelected(const QColor &color)
     int red = color.red();
     int green = color.green();
     int blue = color.blue();
-
 
     core->rayanimset.color[0] = red;
     core->rayanimset.color[1] = green;
