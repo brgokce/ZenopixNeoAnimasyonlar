@@ -40,6 +40,7 @@ void buttonEventClass::mouseMoveEvent(QMouseEvent *event)
 
         emit buttonPositionChanged(newPosX, currentPos.y());
         currentValue += (DeltaX > 0) ? 1 : -1;
+        currentValue = qBound(0, currentValue, 255);
         emit ButtonvalueChanged(currentValue);
 
         if (!moveState)

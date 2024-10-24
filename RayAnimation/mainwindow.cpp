@@ -264,6 +264,10 @@ void MainWindow::on_radioButton_2_clicked()
     {
         core->rayanimset.useHSB=true;
     }
+    else if(!core->rayanimset.useColorWheel &&core->rayanimset.useHSB &&  core->rayanimset.useRGB && !core->rayanimset.randomColorEnable)
+    {
+        core->rayanimset.color= cv::Scalar(255,255,255);
+    }
 
     else
     {
@@ -475,7 +479,8 @@ void MainWindow::onBrightnessChanged(int brightness)
     qDebug() << "Brightness: " << brightness;
 }
 
-void MainWindow::onTabChanged(int index) {
+void MainWindow::onTabChanged(int index)
+{
 
     if (index == 3)
     {

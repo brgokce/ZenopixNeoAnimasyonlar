@@ -34,9 +34,6 @@ public slots:
     void onGreenValueChanged(int value);
     void onBlueValueChanged(int value);
 
-signals:
-    int rgbValueChanged();
-
 private slots:
     void on_spinBox_valueChanged(int arg1);
 

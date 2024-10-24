@@ -103,6 +103,8 @@ void RayAnimThread::run()
 
         else if(core->rayanimset.useColorWheel)
             dynamicRay.dColor = core->currentRayColor;
+        else if(core->rayanimset.useRGB)
+            dynamicRay.dColor= core->RGBcolor;
 
         else
             dynamicRay.dColor = core->rayanimset.color;
@@ -182,6 +184,9 @@ void RayAnimThread::run()
 
                 else if(core->rayanimset.useColorWheel)
                     dynamicRay.dColor = core->currentRayColor;
+
+                else if(core->rayanimset.useRGB)
+                    dynamicRay.dColor= core->RGBcolor;
 
                 else
                     dynamicRay.dColor = core->rayanimset.color;

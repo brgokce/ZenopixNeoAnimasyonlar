@@ -13,14 +13,21 @@ void ChannelLabel::updateButtonPosition(int globalX, int globalY)
 {
     qDebug() << "Buton pozisyonu güncellendi: (" << globalX << ", " << globalY << ")";
 
-    XB= globalX;
+    int minPos = 0;
+
+    int maxPos = width() - Lbutton->width();
+
+    XB = qBound(minPos, globalX, maxPos);
 
     double theta= qAtan(255.0/(width()-Lbutton->width()));
 
     double rawChannelColor = abs(XB) * qTan(theta);
 
+    rawChannelColor = qBound(0.0, rawChannelColor, 255.0);
+
     ChannelColor = static_cast<int>((rawChannelColor /255.0) * 256);
 
+    ChannelColor = qBound(0, ChannelColor, 255);
 
     emit ValueChanged(ChannelColor);
 
