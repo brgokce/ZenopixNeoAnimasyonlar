@@ -11,18 +11,22 @@ class labelCLASS: public QLabel
     Q_OBJECT
 public:
     explicit labelCLASS(QWidget *parent = nullptr);
-    uint8_t* WidgetValue;
+    QColor DefaultPaletteColor(int PaletteNumber) const;
+
+protected:
+    void mousePressEvent(QMouseEvent *event);
 
 signals:
-    void ValueChanged(int value);
-
-public slots:
-    void updateButtonPosition(int x, int y);
+    void PaletteValueChanged(QColor value, int pieceIndex);
 
 private:
-    buttonEventClass* Lbutton;
-    int ChannelColor, XB;
-    int parentwidth=255;
+    QColor currentLColor;
+    QPoint mousePos;
+    QColor PColor;
+
+public slots:
+    void changeColor(int caseNumber);
+
 };
 
 #endif // LABELCLASS_H

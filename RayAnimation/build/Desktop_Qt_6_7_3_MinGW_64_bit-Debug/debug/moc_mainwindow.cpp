@@ -42,6 +42,9 @@ constexpr auto qt_meta_stringdata_CLASSMainWindowENDCLASS = QtMocHelpers::string
     "value",
     "onGreenValueChanged",
     "onBlueValueChanged",
+    "handlePaletteValueChange",
+    "color",
+    "pieceIndex",
     "on_spinBox_valueChanged",
     "arg1",
     "on_radioButton_clicked",
@@ -57,7 +60,6 @@ constexpr auto qt_meta_stringdata_CLASSMainWindowENDCLASS = QtMocHelpers::string
     "on_spinBox_2_valueChanged",
     "on_spinBox_3_valueChanged",
     "onColorHovered",
-    "color",
     "onColorSelected",
     "onHueChanged",
     "hue",
@@ -77,7 +79,7 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-      19,   14, // methods
+      20,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -85,46 +87,48 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSMainWindowENDCLASS[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags, initial metatype offsets
-       1,    1,  128,    2, 0x0a,    1 /* Public */,
-       4,    1,  131,    2, 0x0a,    3 /* Public */,
-       5,    1,  134,    2, 0x0a,    5 /* Public */,
-       6,    1,  137,    2, 0x08,    7 /* Private */,
-       8,    0,  140,    2, 0x08,    9 /* Private */,
-       9,    1,  141,    2, 0x08,   10 /* Private */,
-      10,    1,  144,    2, 0x08,   12 /* Private */,
-      11,    1,  147,    2, 0x08,   14 /* Private */,
-      12,    1,  150,    2, 0x08,   16 /* Private */,
-      13,    0,  153,    2, 0x08,   18 /* Private */,
-      14,    1,  154,    2, 0x08,   19 /* Private */,
-      17,    0,  157,    2, 0x08,   21 /* Private */,
-      18,    1,  158,    2, 0x08,   22 /* Private */,
-      19,    1,  161,    2, 0x08,   24 /* Private */,
-      20,    1,  164,    2, 0x08,   26 /* Private */,
-      22,    1,  167,    2, 0x08,   28 /* Private */,
-      23,    1,  170,    2, 0x08,   30 /* Private */,
-      25,    1,  173,    2, 0x08,   32 /* Private */,
-      27,    1,  176,    2, 0x08,   34 /* Private */,
+       1,    1,  134,    2, 0x0a,    1 /* Public */,
+       4,    1,  137,    2, 0x0a,    3 /* Public */,
+       5,    1,  140,    2, 0x0a,    5 /* Public */,
+       6,    2,  143,    2, 0x0a,    7 /* Public */,
+       9,    1,  148,    2, 0x08,   10 /* Private */,
+      11,    0,  151,    2, 0x08,   12 /* Private */,
+      12,    1,  152,    2, 0x08,   13 /* Private */,
+      13,    1,  155,    2, 0x08,   15 /* Private */,
+      14,    1,  158,    2, 0x08,   17 /* Private */,
+      15,    1,  161,    2, 0x08,   19 /* Private */,
+      16,    0,  164,    2, 0x08,   21 /* Private */,
+      17,    1,  165,    2, 0x08,   22 /* Private */,
+      20,    0,  168,    2, 0x08,   24 /* Private */,
+      21,    1,  169,    2, 0x08,   25 /* Private */,
+      22,    1,  172,    2, 0x08,   27 /* Private */,
+      23,    1,  175,    2, 0x08,   29 /* Private */,
+      24,    1,  178,    2, 0x08,   31 /* Private */,
+      25,    1,  181,    2, 0x08,   33 /* Private */,
+      27,    1,  184,    2, 0x08,   35 /* Private */,
+      29,    1,  187,    2, 0x08,   37 /* Private */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::Int,    3,
     QMetaType::Void, QMetaType::Int,    3,
     QMetaType::Void, QMetaType::Int,    3,
-    QMetaType::Void, QMetaType::Int,    7,
+    QMetaType::Void, QMetaType::QColor, QMetaType::Int,    7,    8,
+    QMetaType::Void, QMetaType::Int,   10,
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,    3,
     QMetaType::Void, QMetaType::Int,    3,
     QMetaType::Void, QMetaType::Int,    3,
     QMetaType::Void, QMetaType::Int,    3,
     QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 15,   16,
+    QMetaType::Void, 0x80000000 | 18,   19,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::Int,    7,
-    QMetaType::Void, QMetaType::Int,    7,
-    QMetaType::Void, QMetaType::QColor,   21,
-    QMetaType::Void, QMetaType::QColor,   21,
-    QMetaType::Void, QMetaType::Int,   24,
+    QMetaType::Void, QMetaType::Int,   10,
+    QMetaType::Void, QMetaType::Int,   10,
+    QMetaType::Void, QMetaType::QColor,    7,
+    QMetaType::Void, QMetaType::QColor,    7,
     QMetaType::Void, QMetaType::Int,   26,
     QMetaType::Void, QMetaType::Int,   28,
+    QMetaType::Void, QMetaType::Int,   30,
 
        0        // eod
 };
@@ -146,6 +150,10 @@ Q_CONSTINIT const QMetaObject MainWindow::staticMetaObject = { {
         QtPrivate::TypeAndForceComplete<int, std::false_type>,
         // method 'onBlueValueChanged'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<int, std::false_type>,
+        // method 'handlePaletteValueChange'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<QColor, std::false_type>,
         QtPrivate::TypeAndForceComplete<int, std::false_type>,
         // method 'on_spinBox_valueChanged'
         QtPrivate::TypeAndForceComplete<void, std::false_type>,
@@ -205,22 +213,23 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 0: _t->onRedValueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         case 1: _t->onGreenValueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         case 2: _t->onBlueValueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 3: _t->on_spinBox_valueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 4: _t->on_radioButton_clicked(); break;
-        case 5: _t->on_horizontalSlider_valueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 6: _t->on_horizontalSlider_2_valueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 7: _t->on_horizontalSlider_3_valueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 8: _t->on_horizontalSlider_4_valueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 9: _t->on_pushButton_clicked(); break;
-        case 10: _t->onprocessFinished((*reinterpret_cast< std::add_pointer_t<cv::Mat>>(_a[1]))); break;
-        case 11: _t->on_radioButton_2_clicked(); break;
-        case 12: _t->on_spinBox_2_valueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 13: _t->on_spinBox_3_valueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 14: _t->onColorHovered((*reinterpret_cast< std::add_pointer_t<QColor>>(_a[1]))); break;
-        case 15: _t->onColorSelected((*reinterpret_cast< std::add_pointer_t<QColor>>(_a[1]))); break;
-        case 16: _t->onHueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 17: _t->onSaturationChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
-        case 18: _t->onBrightnessChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 3: _t->handlePaletteValueChange((*reinterpret_cast< std::add_pointer_t<QColor>>(_a[1])),(*reinterpret_cast< std::add_pointer_t<int>>(_a[2]))); break;
+        case 4: _t->on_spinBox_valueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 5: _t->on_radioButton_clicked(); break;
+        case 6: _t->on_horizontalSlider_valueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 7: _t->on_horizontalSlider_2_valueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 8: _t->on_horizontalSlider_3_valueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 9: _t->on_horizontalSlider_4_valueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 10: _t->on_pushButton_clicked(); break;
+        case 11: _t->onprocessFinished((*reinterpret_cast< std::add_pointer_t<cv::Mat>>(_a[1]))); break;
+        case 12: _t->on_radioButton_2_clicked(); break;
+        case 13: _t->on_spinBox_2_valueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 14: _t->on_spinBox_3_valueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 15: _t->onColorHovered((*reinterpret_cast< std::add_pointer_t<QColor>>(_a[1]))); break;
+        case 16: _t->onColorSelected((*reinterpret_cast< std::add_pointer_t<QColor>>(_a[1]))); break;
+        case 17: _t->onHueChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 18: _t->onSaturationChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
+        case 19: _t->onBrightnessChanged((*reinterpret_cast< std::add_pointer_t<int>>(_a[1]))); break;
         default: ;
         }
     }
@@ -245,13 +254,13 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 19)
+        if (_id < 20)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 19;
+        _id -= 20;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 19)
+        if (_id < 20)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 19;
+        _id -= 20;
     }
     return _id;
 }

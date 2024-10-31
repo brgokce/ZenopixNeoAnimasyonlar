@@ -28,11 +28,14 @@ public:
     ~MainWindow();
     ChannelLabel*rLabel;
     ChannelLabel*gLabel;
-        ChannelLabel*bLabel;
+    ChannelLabel*bLabel;
+    labelCLASS*paletteLabel;
+
 public slots:
     void onRedValueChanged(int value);
     void onGreenValueChanged(int value);
     void onBlueValueChanged(int value);
+    void handlePaletteValueChange(QColor color,int pieceIndex);
 
 private slots:
     void on_spinBox_valueChanged(int arg1);
@@ -57,8 +60,6 @@ private slots:
 
     void on_spinBox_3_valueChanged(int arg1);
 
-
-
 private slots:
     void onColorHovered(const QColor &color);
     void onColorSelected(const QColor &color);
@@ -66,7 +67,6 @@ private slots:
     void onHueChanged(int hue);
     void onSaturationChanged(int saturation);
     void onBrightnessChanged(int brightness);
-
 
 private:
     Ui::MainWindow *ui;
@@ -84,10 +84,16 @@ private:
     void onTabChanged(int index);
     void onTabCWheel(int index);
     void onTabHSB(int index);
+    void onTabPltte(int index);
     QVBoxLayout *sliderLayout;
+    QVBoxLayout *paletteLayout;
     QWidget *sliderTab;
+    QWidget *sliderTabPalette;
     QScrollArea* scrollArea;
+    QScrollArea *palettescrolarea;
     void UpdateRGB();
+    void drawColors();
+    void updateRayPaletteColors();
 
 };
 #endif // MAINWINDOW_H

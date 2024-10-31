@@ -103,12 +103,15 @@ void RayAnimThread::run()
 
         else if(core->rayanimset.useColorWheel)
             dynamicRay.dColor = core->currentRayColor;
+
         else if(core->rayanimset.useRGB)
-            dynamicRay.dColor= core->RGBcolor;
+              dynamicRay.dColor= core->RGBcolor;
+
+        else if (core->rayanimset.usePalette)
+            dynamicRay.dColor = core->PaletteColor[core->rayanimset.selectedIndex];
 
         else
             dynamicRay.dColor = core->rayanimset.color;
-
 
 
         core->rayanimset.Ray_Lines.append(dynamicRay);
@@ -182,14 +185,20 @@ void RayAnimThread::run()
                 else if(core->rayanimset.useHSB)
                     dynamicRay.dColor = core->HSBcolor;
 
+
                 else if(core->rayanimset.useColorWheel)
                     dynamicRay.dColor = core->currentRayColor;
+
 
                 else if(core->rayanimset.useRGB)
                     dynamicRay.dColor= core->RGBcolor;
 
+                else if (core->rayanimset.usePalette)
+                    dynamicRay.dColor = core->PaletteColor[core->rayanimset.selectedIndex];
+
                 else
                     dynamicRay.dColor = core->rayanimset.color;
+
 
                 core->rayanimset.Ray_Lines.append(dynamicRay);
 
@@ -252,8 +261,6 @@ void RayAnimThread::run()
                     ray.dColor = core->RandomColor();
                 }
             }
-
-
         }
 
         emit processFinished(core->Img);

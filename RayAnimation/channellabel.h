@@ -21,7 +21,6 @@ private:
     buttonEventClass* Lbutton;
     int ChannelColor, XB;
     int parentwidth=256;
-    void setLabelColor(int colorValue);
 
 };
 

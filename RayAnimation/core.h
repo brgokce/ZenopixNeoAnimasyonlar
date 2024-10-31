@@ -36,18 +36,20 @@ public:
         int NumberOfRay=1;
         int Speed=1;
         int tickness=1;
-        cv::Scalar color= cv::Scalar(255,255,255);
+        cv::Scalar color= cv::Scalar(0,0,0);
         int Ray_bore =1;
         bool randomColorEnable= false;
         bool userChangedSpeed = false;
         bool useColorWheel = false;
         bool useHSB=false;
         bool useRGB= false;
+        bool usePalette= false;
         int brightness=0;
 
         int lastHue = -1;
         int lastSaturation = -1;
         int lastBrightness = -1;
+        int selectedIndex=0;
 
         QVector<DynamicRayAnimSet> Ray_Lines;
 
@@ -74,8 +76,9 @@ public:
     cv::Scalar currentRayColor;
     cv::Scalar HSBcolor;
     cv::Scalar RGBcolor;
-
+    std::vector<cv::Scalar> PaletteColor;
     cv::Scalar RandomColor();
+    QColor PColor;
 };
 
 #endif // CORE_H

@@ -1,32 +1,50 @@
 #include "labelclass.h"
 #include "qevent.h"
+#include "qpainter.h"
 #include "qpushbutton.h"
-#include "cmath"
-#include <QtMath>
 
 labelCLASS::labelCLASS(QWidget *parent)
     : QLabel(parent)
 {
-    Lbutton= new buttonEventClass(&parentwidth, this);
-    connect(Lbutton, &buttonEventClass::buttonPositionChanged, this, &labelCLASS::updateButtonPosition);
-    this->setFixedWidth(256);
+    this->setFixedWidth(296);
+    this->setFixedHeight(20);
+    setScaledContents(true);
 }
 
-void labelCLASS::updateButtonPosition(int globalX, int globalY)
+QColor labelCLASS::DefaultPaletteColor(int PaletteNumber) const
 {
-    qDebug() << "Buton pozisyonu güncellendi: (" << globalX << ", " << globalY << ")";
+    switch(PaletteNumber)
+    {
+    case 1: return QColor(Qt::red);
+    case 2: return QColor(Qt::green);
+    case 3: return QColor(Qt::yellow);
+    case 4: return QColor(Qt::gray);
+    case 5: return QColor(0, 0, 135);
+    case 6: return QColor(128, 0, 128);
+    case 7: return QColor(173, 216, 230);
+    case 8: return QColor(Qt::white);
+    default: return QColor(Qt::black);
+    }  
+}
 
-    XB= globalX;
+void labelCLASS::changeColor(int caseNumber)
+{
+    QColor newColor = DefaultPaletteColor(caseNumber);
+    emit PaletteValueChanged(newColor, caseNumber-1);
+}
 
-    double theta= qAtan(255.0/(width()-Lbutton->width()));
+void labelCLASS::mousePressEvent(QMouseEvent *event)
+{
+    int pieceWidth = width() / 8;
 
-    double rawChannelColor = abs(XB) * qTan(theta);
+    int pieceIndex = event->x() / pieceWidth;
+    qDebug() << "Mouse clicked at: " << event->x() << ", Piece index: " << pieceIndex;
 
-    ChannelColor = static_cast<int>((rawChannelColor /255.0) * 256);
+    if (pieceIndex >= 0 && pieceIndex < 8)
+    {
+        QColor clickedColor = DefaultPaletteColor(pieceIndex + 1);
+        emit PaletteValueChanged(clickedColor, pieceIndex);
+    }
 
-    emit ValueChanged(ChannelColor);
-
-    qDebug()<<"değer xb:"<<XB;
-
-    qDebug()<<"değer:"<<ChannelColor;
+    QLabel::mousePressEvent(event);
 }
