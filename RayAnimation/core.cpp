@@ -1,7 +1,9 @@
 #include "core.h"
 #include <QRandomGenerator>
 
-Core::Core() {}
+Core::Core()
+{
+}
 
 
 cv::Scalar Core::RandomColor()

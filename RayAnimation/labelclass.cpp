@@ -1,7 +1,9 @@
 #include "labelclass.h"
+#include "core.h"
 #include "qevent.h"
 #include "qpainter.h"
 #include "qpushbutton.h"
+
 
 labelCLASS::labelCLASS(QWidget *parent)
     : QLabel(parent)

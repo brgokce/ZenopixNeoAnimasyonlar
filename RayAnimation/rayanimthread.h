@@ -31,7 +31,6 @@ private:
     QMutex mutex;
     HSBColorWheel* hsbcolorwheel;
 
-
 };
 
 #endif // RAYANIMTHREAD_H

@@ -6,6 +6,7 @@
 #include <QObject>
 #include <QWidget>
 
+
 class labelCLASS: public QLabel
 {
     Q_OBJECT
@@ -20,7 +21,6 @@ signals:
     void PaletteValueChanged(QColor value, int pieceIndex);
 
 private:
-    QColor currentLColor;
     QPoint mousePos;
     QColor PColor;
 

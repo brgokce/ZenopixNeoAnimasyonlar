@@ -30,8 +30,7 @@ void RayAnimThread::run()
 {
     if (!core->rayanimset.userChangedSpeed)
     {
-        // Varsayılan hız değerini kullan
-        core->rayanimset.Speed = 100; // İlk hız
+        core->rayanimset.Speed = 100;
     }
 
     core->rayanimset.Ray_Lines.clear();
@@ -105,7 +104,7 @@ void RayAnimThread::run()
             dynamicRay.dColor = core->currentRayColor;
 
         else if(core->rayanimset.useRGB)
-              dynamicRay.dColor= core->RGBcolor;
+            dynamicRay.dColor= core->RGBcolor;
 
         else if (core->rayanimset.usePalette)
             dynamicRay.dColor = core->PaletteColor[core->rayanimset.selectedIndex];

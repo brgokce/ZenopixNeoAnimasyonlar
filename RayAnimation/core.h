@@ -13,7 +13,6 @@ class Core
 public:
     Core();
 
-
     struct DynamicRayAnimSet
     {
         int Angle;
@@ -28,7 +27,6 @@ public:
         int Long;
         int deltah1;
         int deltaw1; int deltaw2;
-
     };
 
     struct RayAnimationSettings
@@ -38,12 +36,15 @@ public:
         int tickness=1;
         cv::Scalar color= cv::Scalar(0,0,0);
         int Ray_bore =1;
+
         bool randomColorEnable= false;
         bool userChangedSpeed = false;
         bool useColorWheel = false;
         bool useHSB=false;
         bool useRGB= false;
         bool usePalette= false;
+        bool ScaleOn=false;
+
         int brightness=0;
 
         int lastHue = -1;
@@ -51,8 +52,11 @@ public:
         int lastBrightness = -1;
         int selectedIndex=0;
 
-        QVector<DynamicRayAnimSet> Ray_Lines;
+        double Scale=1.0;
+        double ScaleFactor=1.1;
+        QPointF MousePos;
 
+        QVector<DynamicRayAnimSet> Ray_Lines;
     };
 
     struct RGBWidgetValues
@@ -61,11 +65,9 @@ public:
         uint8_t GWidgetValue=0;
         uint8_t BWidgetValue=0;
 
-
         QImage Rimage = QImage(256,1, QImage::Format_RGB888);
         QImage GImage = QImage(256,1,QImage::Format_RGB888);
         QImage BImage = QImage(256,1,QImage::Format_RGB888);
-
     };
 
     RGBWidgetValues rgbWidgetValues;
@@ -79,6 +81,7 @@ public:
     std::vector<cv::Scalar> PaletteColor;
     cv::Scalar RandomColor();
     QColor PColor;
+    cv::Scalar HSBcolorActive[8];
 };
 
 #endif // CORE_H

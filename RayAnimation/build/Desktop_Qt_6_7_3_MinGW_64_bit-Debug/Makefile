@@ -410,6 +410,7 @@ Makefile: ../../RayAnimation.pro C:/Qt/6.7.3/mingw_64/mkspecs/win32-g++/qmake.co
 		../../RayAnimation.pro \
 		C:/Qt/6.7.3/mingw_64/lib/Qt6Widgets.prl \
 		C:/Qt/6.7.3/mingw_64/lib/Qt6Gui.prl \
+		C:/Qt/6.7.3/mingw_64/lib/Qt6Concurrent.prl \
 		C:/Qt/6.7.3/mingw_64/lib/Qt6Core.prl \
 		C:/Qt/6.7.3/mingw_64/lib/Qt6EntryPoint.prl \
 		.qmake.stash \
@@ -755,6 +756,7 @@ C:/Qt/6.7.3/mingw_64/mkspecs/features/lex.prf:
 ../../RayAnimation.pro:
 C:/Qt/6.7.3/mingw_64/lib/Qt6Widgets.prl:
 C:/Qt/6.7.3/mingw_64/lib/Qt6Gui.prl:
+C:/Qt/6.7.3/mingw_64/lib/Qt6Concurrent.prl:
 C:/Qt/6.7.3/mingw_64/lib/Qt6Core.prl:
 C:/Qt/6.7.3/mingw_64/lib/Qt6EntryPoint.prl:
 .qmake.stash:

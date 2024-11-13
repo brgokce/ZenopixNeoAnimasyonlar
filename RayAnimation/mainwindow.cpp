@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QRandomGenerator>
 #include "ColorWheelWidget.h"
+#include <QGraphicsPixmapItem>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -19,9 +20,13 @@ MainWindow::MainWindow(QWidget *parent)
 
     tabwidget = new QTabWidget(this);
 
+    tabwidgetFrame= new QTabWidget(this);
+
     sliderTab = new QWidget();
 
     sliderTabPalette= new QWidget();
+
+    ScaleTab= new QWidget();
 
     tabwidget->addTab(sliderTab, "RGB");
 
@@ -39,21 +44,34 @@ MainWindow::MainWindow(QWidget *parent)
 
     tabwidget->addTab(sliderTabPalette, "Palette");
 
+    tabwidgetFrame->addTab(ScaleTab, "Scaling");
+
     sliderLayout = new QVBoxLayout(sliderTab);
 
     sliderLayout = new QVBoxLayout(sliderTabPalette);
+
+    scaleLayout= new QVBoxLayout(ScaleTab);
 
     scrollArea= new QScrollArea(sliderTab);
 
     palettescrolarea= new QScrollArea(sliderTabPalette);
 
+    scaleScrollArea= new QScrollArea(ScaleTab);
+
     scrollArea->setFixedSize(334, 273);
 
     palettescrolarea->setFixedSize(334, 274);
 
+    scaleScrollArea->setFixedSize(371,221);
+
     if (ui->gridLayout_2)
     {
         ui->gridLayout_2->addWidget(tabwidget);
+    }
+
+    if(ui->gridLayout_3)
+    {
+        ui->gridLayout_3->addWidget(tabwidgetFrame);
     }
 
     hsbcolorwheel->setHueText("Hue");
@@ -104,8 +122,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(rayAnimthread,SIGNAL(processFinished(cv::Mat)),this,SLOT(onprocessFinished(cv::Mat)));
 
-    connect(colorWheel, &ColorWheelWidget::colorHovered, this, &MainWindow::onColorHovered);
-
     connect(colorWheel, &ColorWheelWidget::colorSelected, this, &MainWindow::onColorSelected);
 
     connect(hsbcolorwheel, &HSBColorWheel::hueChanged, this, &MainWindow::onHueChanged);
@@ -116,13 +132,13 @@ MainWindow::MainWindow(QWidget *parent)
     connect(tabwidget, &QTabWidget::currentChanged, this, &MainWindow::onTabCWheel);
     connect(tabwidget, &QTabWidget::currentChanged, this, &MainWindow::onTabHSB);
     connect(tabwidget, &QTabWidget::currentChanged, this, &MainWindow::onTabPltte);
+    connect(tabwidgetFrame, &QTabWidget::currentChanged, this, &MainWindow::onTabScale);
 
     connect(paletteLabel, &labelCLASS::PaletteValueChanged, this, &MainWindow::handlePaletteValueChange);
 
     core->spinbox= ui->spinBox_3;
     UpdateRGB();
     drawColors();
-
 }
 
 MainWindow::~MainWindow()
@@ -141,7 +157,7 @@ void MainWindow::handlePaletteValueChange(QColor color,int pieceIndex)
     {
         if (core->PaletteColor.size() < 8)
         {
-            core->PaletteColor.resize(8); // 8 elemanlı olmasını sağla
+            core->PaletteColor.resize(8);
         }
 
         qDebug() << "Setting PaletteColor[" << pieceIndex << "] to:" << "R:" << color.red() << "G:" << color.green() << "B:" << color.blue();
@@ -158,16 +174,13 @@ void MainWindow::handlePaletteValueChange(QColor color,int pieceIndex)
                      << "B:" << core->rayanimset.Ray_Lines[pieceIndex].dColor[0];
         }
     }
-
     drawColors();
-
     updateRayPaletteColors();
-
 }
 
 void MainWindow::drawColors()
 {
-    core->rayanimset.usePalette=true;
+    core->rayanimset.usePalette = true;
 
     QImage image(paletteLabel->size(), QImage::Format_RGB32);
     image.fill(Qt::transparent);
@@ -176,19 +189,21 @@ void MainWindow::drawColors()
 
     for (int p = 0; p < 8; ++p)
     {
-        QColor color = paletteLabel->DefaultPaletteColor(p + 1);
+        QColor color;
+
+        color = paletteLabel->DefaultPaletteColor(p + 1);
 
         for (int x = 0; x < pieceWidth; ++x)
         {
             for (int y = 0; y < paletteLabel->height(); ++y)
             {
-                    image.setPixelColor(p * pieceWidth + x, y, color);
+                image.setPixelColor(p * pieceWidth + x, y, color);
             }
         }
     }
 
-      paletteLabel->setPixmap(QPixmap::fromImage(image));
-      paletteLabel->update();
+    paletteLabel->setPixmap(QPixmap::fromImage(image));
+    paletteLabel->update();
 }
 
 void MainWindow::onRedValueChanged(int value)
@@ -204,7 +219,6 @@ void MainWindow::onRedValueChanged(int value)
 
     core->RGBcolor[2]= value;
     updateRayRGBColors();
-
 }
 
 void MainWindow::onGreenValueChanged(int value)
@@ -220,7 +234,6 @@ void MainWindow::onGreenValueChanged(int value)
 
     core->RGBcolor[1]= value;
     updateRayRGBColors();
-
 }
 
 void MainWindow::onBlueValueChanged(int value)
@@ -281,7 +294,6 @@ void MainWindow::UpdateRGB()
 void MainWindow::on_spinBox_valueChanged(int arg1)
 {
     core->rayanimset.NumberOfRay= arg1;
-
 }
 
 void MainWindow::on_spinBox_2_valueChanged(int arg1)
@@ -302,22 +314,21 @@ void MainWindow::on_radioButton_clicked()
 
 void MainWindow::on_horizontalSlider_valueChanged(int value)
 {
-    core->rayanimset.color[0]= value; //red
+    core->rayanimset.color[0]= value;
     core->rayanimset.useColorWheel = false;
     updateRayColors();
-
 }
 
 void MainWindow::on_horizontalSlider_2_valueChanged(int value)
 {
-    core->rayanimset.color[1]= value; //green
+    core->rayanimset.color[1]= value;
     core->rayanimset.useColorWheel = false;
     updateRayColors();
 }
 
 void MainWindow::on_horizontalSlider_3_valueChanged(int value)
 {
-    core->rayanimset.color[2]= value; //blue
+    core->rayanimset.color[2]= value;
     core->rayanimset.useColorWheel = false;
     updateRayColors();
 }
@@ -328,8 +339,8 @@ void MainWindow::on_radioButton_2_clicked()
 
     if(!core->rayanimset.useColorWheel)
     {
-        ui->horizontalSlider->setEnabled(true); // Kırmızı slider'ı etkinleştir
-        ui->horizontalSlider_2->setEnabled(true); // Yeşil slider'ı etkinleştir
+        ui->horizontalSlider->setEnabled(true);
+        ui->horizontalSlider_2->setEnabled(true);
         ui->horizontalSlider_3->setEnabled(true);
         core->rayanimset.useRGB= true;
         updateRayColors();
@@ -338,7 +349,6 @@ void MainWindow::on_radioButton_2_clicked()
     {
         core->rayanimset.useHSB=true;
     }
-
     else
     {
         core->rayanimset.useColorWheel=true;
@@ -361,7 +371,6 @@ void MainWindow::on_horizontalSlider_4_valueChanged(int value)
     if (value > 50)
     {
         core->rayanimset.Speed = 110 - value;
-
     }
 
     else
@@ -372,9 +381,78 @@ void MainWindow::on_horizontalSlider_4_valueChanged(int value)
 
 void MainWindow::onprocessFinished(cv::Mat img)
 {
-    QImage qimg= matToImage(img);
-    ui->Screen->setPixmap(QPixmap::fromImage(qimg));
+    if(core->rayanimset.ScaleOn)
+    {
+        ScaleTablePos(core->rayanimset.MousePos, core->rayanimset.Scale);
+
+        int rectW= img.cols/(core->rayanimset.Scale);
+        int rectH= img.rows/(core->rayanimset.Scale);
+
+        int startX= (img.cols-rectW)/2;
+        int startY= (img.rows-rectH)/2;
+
+        startX = std::max(0, startX);
+        startY = std::max(0, startY);
+
+        rectW = std::min(rectW, img.cols - startX);
+        rectH = std::min(rectH, img.rows - startY);
+
+        if (rectW > 0 && rectH > 0){
+
+        cv::Rect roi(startX,startY,rectW,rectH);
+        cv::Mat roiImg= img(roi);
+
+        cv::resize(roiImg, roiImg, cv::Size(ui->Screen->width(),ui->Screen->height()));
+
+        qimg= matToImage(roiImg);
+
+        ui->Screen->setPixmap(QPixmap::fromImage(qimg));
+
+        }
+    }
+
+    else
+    {
+        qimg = matToImage(img);
+        ui->Screen->setPixmap(QPixmap::fromImage(qimg));
+        ui->Screen->resize(img.cols, img.rows);
+    }
 }
+
+void MainWindow::wheelEvent(QWheelEvent *event)
+{
+    core->rayanimset.ScaleOn= true;
+    core->rayanimset.MousePos= event->position();
+
+    if(event->angleDelta().y()>0)
+    {
+        core->rayanimset.ScaleFactor=1.1;
+        core->rayanimset.Scale*=core->rayanimset.ScaleFactor;
+    }
+
+    else
+    {
+        core->rayanimset.ScaleFactor=0.9;
+        core->rayanimset.Scale*=core->rayanimset.ScaleFactor;
+    }
+
+    event->accept();
+}
+
+void MainWindow::ScaleTablePos(const QPointF &currCursorPoint, double scaleFactor)
+{
+    double newX_d = core->rayanimset.MousePos.x() - (core->rayanimset.MousePos.x() + currCursorPoint.x() - (core->rayanimset.MousePos.x() + currCursorPoint.x()) * scaleFactor);
+    double newY_d = core->rayanimset.MousePos.y() - (core->rayanimset.MousePos.y() + currCursorPoint.y() - (core->rayanimset.MousePos.y() + currCursorPoint.y()) * scaleFactor);
+
+    int newX = round(newX_d * 1000.0) / 1000.0;
+    int newY = round(newY_d * 1000.0) / 1000.0;
+
+    core->rayanimset.MousePos.setX(newX);
+    core->rayanimset.MousePos.setY(newY);
+
+    update();
+}
+
 QImage MainWindow::matToImage(const cv::Mat &mat) const noexcept
 {
     if(mat.empty())
@@ -443,7 +521,7 @@ void MainWindow::updateRayColors()
         {
             core->rayanimset.useColorWheel = true;
 
-            cv::Scalar fixedColor(core->rayanimset.color[2], core->rayanimset.color[1], core->rayanimset.color[0]); // BGR sırası
+            cv::Scalar fixedColor(core->rayanimset.color[2], core->rayanimset.color[1], core->rayanimset.color[0]);
             for (int i = 0; i < core->rayanimset.Ray_Lines.size(); ++i)
             {
                 core->rayanimset.Ray_Lines[i].dColor = fixedColor;
@@ -456,20 +534,19 @@ void MainWindow::updateRayColors()
 
 void MainWindow::updateRayRGBColors()
 {
-  if (!core->rayanimset.randomColorEnable) // Sabit renk aktifse
+  if (!core->rayanimset.randomColorEnable)
   {
      if(core->rayanimset.useRGB)
       {
 
-        cv::Scalar fixedColor(core->RGBcolor[0], core->RGBcolor[1], core->RGBcolor[2]); // BGR sırası
+        cv::Scalar fixedColor(core->RGBcolor[0], core->RGBcolor[1], core->RGBcolor[2]);
         for (int i = 0; i < core->rayanimset.Ray_Lines.size(); ++i)
         {
-            core->rayanimset.Ray_Lines[i].dColor = fixedColor; // Sabit renk kullan
+            core->rayanimset.Ray_Lines[i].dColor = fixedColor;
         }
         core->rayanimset.useHSB= false;
         core->rayanimset.useColorWheel = false;
         core->rayanimset.usePalette=false;
-
       }
   }
     rayAnimthread->updateColors();
@@ -481,8 +558,6 @@ void MainWindow::updateRayPaletteColors()
 
     if (core->rayanimset.randomColorEnable || !core->rayanimset.usePalette)
         return;
-
-    int paletteSize = core->PaletteColor.size();
 
     int selectedColorIndex = core->rayanimset.selectedIndex;
 
@@ -499,18 +574,6 @@ void MainWindow::updateRayPaletteColors()
      core->rayanimset.useRGB = false;
  }
     rayAnimthread->updateColors();
-}
-
-void MainWindow::onColorHovered(const QColor &color)
-{
-    // Example: Set the background color of the MainWindow to the hovered color
-    //QPalette palette = this->palette();
-    //palette.setColor(QPalette::Window, color);
-    //this->setPalette(palette);
-
-    //qDebug() << "Selected color:" << color;
-
-    // ui->coloscreen->setText("Hovered Color: " + color.name());
 }
 
 void MainWindow::onColorSelected(const QColor &color)
@@ -531,7 +594,6 @@ void MainWindow::onColorSelected(const QColor &color)
 
     core->currentRayColor = cv::Scalar(red, green, blue);
 
-    // Renkleri kontrol et
     qDebug() << "Selected Color (R,G,B):" << red << green << blue;
 
     core->rayanimset.useColorWheel=true;
@@ -550,7 +612,7 @@ void MainWindow::onHueChanged(int hue)
     if (core->rayanimset.lastHue != hue) {
         core->rayanimset.lastHue = hue;
         core->rayanimset.useHSB = true;
-        updateRayColors();  // Update colors when hue changes
+        updateRayColors();
     }
     qDebug() << "Hue: " << hue;
 }
@@ -561,7 +623,7 @@ void MainWindow::onSaturationChanged(int saturation)
         core->rayanimset.lastSaturation = saturation;
         core->rayanimset.useHSB = true;
         core->RGBcolor= false;
-        updateRayColors();  // Update colors when saturation changes
+        updateRayColors();
     }
     qDebug() << "Saturation: " << saturation;
 }
@@ -572,7 +634,7 @@ void MainWindow::onBrightnessChanged(int brightness)
         core->rayanimset.lastBrightness = brightness;
         core->rayanimset.useHSB = true;
         core->RGBcolor= false;
-        updateRayColors();  // Update colors when brightness changes
+        updateRayColors();
     }
     qDebug() << "Brightness: " << brightness;
 }
@@ -582,7 +644,6 @@ void MainWindow::onTabChanged(int index)
 
     if (index == 3)
     {
-
     }
 }
 
@@ -590,16 +651,13 @@ void MainWindow::onTabPltte(int index)
 {
     if(index==2)
     {
-
     }
 }
-
 
 void MainWindow::onTabCWheel(int index)
 {
     if(index==1)
     {
-
     }
 }
 
@@ -607,6 +665,12 @@ void MainWindow::onTabHSB(int index)
 {
     if(index==0)
     {
+    }
+}
 
+void MainWindow::onTabScale(int index)
+{
+    if(index==0)
+    {
     }
 }
