@@ -381,8 +381,8 @@ void MainWindow::on_horizontalSlider_4_valueChanged(int value)
 
 void MainWindow::onprocessFinished(cv::Mat img)
 {
-    if(core->rayanimset.ScaleOn)
-    {
+    if(core->rayanimset.ScaleOn){
+
         ScaleTablePos(core->rayanimset.MousePos, core->rayanimset.Scale);
 
         int rectW= img.cols/(core->rayanimset.Scale);
@@ -397,22 +397,40 @@ void MainWindow::onprocessFinished(cv::Mat img)
         rectW = std::min(rectW, img.cols - startX);
         rectH = std::min(rectH, img.rows - startY);
 
-        if (rectW > 0 && rectH > 0){
+        if (img.cols*core->rayanimset.Scale>ui->Screen->width() || img.rows*core->rayanimset.Scale>ui->Screen->height()){
 
-        cv::Rect roi(startX,startY,rectW,rectH);
-        cv::Mat roiImg= img(roi);
+            cv::Rect roi(startX,startY,rectW,rectH);
+            cv::Mat roiImg= img(roi);
 
-        cv::resize(roiImg, roiImg, cv::Size(ui->Screen->width(),ui->Screen->height()));
+            cv::resize(roiImg, roiImg, cv::Size(ui->Screen->width(),ui->Screen->height()));
 
-        qimg= matToImage(roiImg);
+            qimg= matToImage(roiImg);
+            ui->Screen->setPixmap(QPixmap::fromImage(qimg));
+        }
 
-        ui->Screen->setPixmap(QPixmap::fromImage(qimg));
+        else
+        {
+            int newW = img.cols * core->rayanimset.Scale;
+            int newH = img.rows * core->rayanimset.Scale;
 
+            QImage scaledImage(ui->Screen->width(), ui->Screen->height(), QImage::Format_RGB888);
+            scaledImage.fill(Qt::black);
+
+            cv::resize(img, img, cv::Size(newW, newH));
+
+            QImage imgQImage = matToImage(img);
+
+            QPainter painter(&scaledImage);
+            int offsetX = (scaledImage.width() - imgQImage.width()) / 2;
+            int offsetY = (scaledImage.height() - imgQImage.height()) / 2;
+            painter.drawImage(offsetX, offsetY, imgQImage);
+
+            ui->Screen->setPixmap(QPixmap::fromImage(scaledImage));
         }
     }
 
-    else
-    {
+    else {
+
         qimg = matToImage(img);
         ui->Screen->setPixmap(QPixmap::fromImage(qimg));
         ui->Screen->resize(img.cols, img.rows);
