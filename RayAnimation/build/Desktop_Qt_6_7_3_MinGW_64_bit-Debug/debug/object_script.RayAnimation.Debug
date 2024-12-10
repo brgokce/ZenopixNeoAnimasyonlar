@@ -1,3 +1,5 @@
+debug/anchorbutton.o
+debug/anchorlabel.o
 debug/buttoneventclass.o
 debug/channellabel.o
 debug/colorwheelwidget.o
@@ -7,6 +9,8 @@ debug/labelclass.o
 debug/main.o
 debug/mainwindow.o
 debug/rayanimthread.o
+debug/moc_anchorbutton.o
+debug/moc_anchorlabel.o
 debug/moc_buttoneventclass.o
 debug/moc_channellabel.o
 debug/moc_colorwheelwidget.o

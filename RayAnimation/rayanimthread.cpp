@@ -45,7 +45,7 @@ void RayAnimThread::run()
     int oldNumberOfRay = 1;
     int oldnumberin=1;// Store the initial number of rays
 
-    // Initialize rays based on the current number of rays
+
     for (int r = 0; r < core->rayanimset.NumberOfRay; r++)
     {
         Core::DynamicRayAnimSet dynamicRay;
@@ -236,12 +236,18 @@ void RayAnimThread::run()
             int x_end = x_second + ray.Long * cos(ray.Angle * CV_PI / 180.0);
             int y_end = y_second - ray.Long * sin(ray.Angle * CV_PI / 180.0);
 
-            cv::line(core->Img, cv::Point(x_second,y_second), cv::Point(x_end, y_end),ray.dColor,core->rayanimset.tickness);
+            if (ray.Long < 0){
+                ray.Long = 0;
+            }
 
-            ray.EndPoint= cv::Point(x_end,y_end);
-            ray.SecondPoint= cv::Point(x_second,y_second);
+            cv::Point p_second= core->Offset(cv::Point(x_second, y_second));
+            cv::Point p_end= core->Offset(cv::Point(x_end, y_end));
+
+            cv::line(core->Img, p_second, p_end, ray.dColor, core->rayanimset.tickness);
+
+            ray.EndPoint= p_end;
+            ray.SecondPoint= p_second;
             ray.ray_in= QRandomGenerator::global()->bounded(core->rayanimset.Ray_bore/2,core->rayanimset.Ray_bore);
-
 
             ray.Angle+= ray.dir* 5.0;
             if(ray.Angle>360)

@@ -17,6 +17,7 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
+#include <QtWidgets/QScrollArea>
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QStatusBar>
@@ -46,8 +47,14 @@ public:
     QSlider *horizontalSlider;
     QSlider *horizontalSlider_2;
     QSlider *horizontalSlider_3;
-    QWidget *gridLayoutWidget_3;
-    QGridLayout *gridLayout_3;
+    QScrollArea *scrollArea;
+    QWidget *scrollAreaWidgetContents;
+    QPushButton *plusBt;
+    QPushButton *minusBt;
+    QPushButton *minusBt_2;
+    QPushButton *plusBt_2;
+    QPushButton *minusBt_3;
+    QPushButton *plusBt_3;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -134,12 +141,32 @@ public:
         horizontalSlider_3->setMaximum(255);
         horizontalSlider_3->setValue(255);
         horizontalSlider_3->setOrientation(Qt::Orientation::Horizontal);
-        gridLayoutWidget_3 = new QWidget(centralwidget);
-        gridLayoutWidget_3->setObjectName("gridLayoutWidget_3");
-        gridLayoutWidget_3->setGeometry(QRect(460, 90, 311, 101));
-        gridLayout_3 = new QGridLayout(gridLayoutWidget_3);
-        gridLayout_3->setObjectName("gridLayout_3");
-        gridLayout_3->setContentsMargins(0, 0, 0, 0);
+        scrollArea = new QScrollArea(centralwidget);
+        scrollArea->setObjectName("scrollArea");
+        scrollArea->setGeometry(QRect(460, 80, 321, 141));
+        scrollArea->setWidgetResizable(true);
+        scrollAreaWidgetContents = new QWidget();
+        scrollAreaWidgetContents->setObjectName("scrollAreaWidgetContents");
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 319, 139));
+        scrollArea->setWidget(scrollAreaWidgetContents);
+        plusBt = new QPushButton(centralwidget);
+        plusBt->setObjectName("plusBt");
+        plusBt->setGeometry(QRect(410, 90, 19, 19));
+        minusBt = new QPushButton(centralwidget);
+        minusBt->setObjectName("minusBt");
+        minusBt->setGeometry(QRect(440, 90, 19, 19));
+        minusBt_2 = new QPushButton(centralwidget);
+        minusBt_2->setObjectName("minusBt_2");
+        minusBt_2->setGeometry(QRect(440, 130, 19, 19));
+        plusBt_2 = new QPushButton(centralwidget);
+        plusBt_2->setObjectName("plusBt_2");
+        plusBt_2->setGeometry(QRect(410, 130, 19, 19));
+        minusBt_3 = new QPushButton(centralwidget);
+        minusBt_3->setObjectName("minusBt_3");
+        minusBt_3->setGeometry(QRect(440, 170, 19, 19));
+        plusBt_3 = new QPushButton(centralwidget);
+        plusBt_3->setObjectName("plusBt_3");
+        plusBt_3->setGeometry(QRect(410, 170, 19, 19));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
@@ -166,6 +193,12 @@ public:
         label_2->setText(QCoreApplication::translate("MainWindow", "Ray Tickness", nullptr));
         label_8->setText(QCoreApplication::translate("MainWindow", "Ray bore", nullptr));
         labelray->setText(QCoreApplication::translate("MainWindow", "Ray Number", nullptr));
+        plusBt->setText(QString());
+        minusBt->setText(QString());
+        minusBt_2->setText(QString());
+        plusBt_2->setText(QString());
+        minusBt_3->setText(QString());
+        plusBt_3->setText(QString());
     } // retranslateUi
 
 };

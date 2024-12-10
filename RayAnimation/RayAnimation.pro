@@ -9,6 +9,8 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    anchorbutton.cpp \
+    anchorlabel.cpp \
     buttoneventclass.cpp \
     channellabel.cpp \
     colorwheelwidget.cpp \
@@ -20,6 +22,8 @@ SOURCES += \
     rayanimthread.cpp
 
 HEADERS += \
+    anchorbutton.h \
+    anchorlabel.h \
     buttoneventclass.h \
     channellabel.h \
     colorwheelwidget.h \

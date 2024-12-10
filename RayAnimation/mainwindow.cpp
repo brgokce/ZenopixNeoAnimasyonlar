@@ -2,7 +2,6 @@
 #include "ui_mainwindow.h"
 #include <QRandomGenerator>
 #include "ColorWheelWidget.h"
-#include <QGraphicsPixmapItem>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -20,13 +19,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     tabwidget = new QTabWidget(this);
 
-    tabwidgetFrame= new QTabWidget(this);
-
     sliderTab = new QWidget();
 
     sliderTabPalette= new QWidget();
-
-    ScaleTab= new QWidget();
 
     tabwidget->addTab(sliderTab, "RGB");
 
@@ -44,34 +39,21 @@ MainWindow::MainWindow(QWidget *parent)
 
     tabwidget->addTab(sliderTabPalette, "Palette");
 
-    tabwidgetFrame->addTab(ScaleTab, "Scaling");
-
     sliderLayout = new QVBoxLayout(sliderTab);
 
     sliderLayout = new QVBoxLayout(sliderTabPalette);
-
-    scaleLayout= new QVBoxLayout(ScaleTab);
 
     scrollArea= new QScrollArea(sliderTab);
 
     palettescrolarea= new QScrollArea(sliderTabPalette);
 
-    scaleScrollArea= new QScrollArea(ScaleTab);
-
     scrollArea->setFixedSize(334, 273);
 
     palettescrolarea->setFixedSize(334, 274);
 
-    scaleScrollArea->setFixedSize(371,221);
-
     if (ui->gridLayout_2)
     {
         ui->gridLayout_2->addWidget(tabwidget);
-    }
-
-    if(ui->gridLayout_3)
-    {
-        ui->gridLayout_3->addWidget(tabwidgetFrame);
     }
 
     hsbcolorwheel->setHueText("Hue");
@@ -116,6 +98,30 @@ MainWindow::MainWindow(QWidget *parent)
 
     paletteLabel->setScaledContents(true);
 
+    QWidget *scrollWidget = new QWidget(ui->scrollArea);
+    QVBoxLayout *layoutA = new QVBoxLayout(scrollWidget);
+
+    AncX = new AnchorLabel(core, scrollWidget);
+    AncX->setAButton();
+    AncX->setGeometry(10, 10, 300, 30);
+    AncX->setScaledContents(true);
+    layoutA->addWidget(AncX);
+
+    AncY = new AnchorLabel(core, scrollWidget);
+    AncY->setBButton();
+    AncY->setGeometry(10, 50, 300, 30);
+    AncY->setScaledContents(true);
+    layoutA->addWidget(AncY);
+
+    AnchorLabel *AncZ = new AnchorLabel(core, scrollWidget);
+    AncZ->setCButton();
+    AncZ->setGeometry(10, 120, 300, 30);
+    AncZ->setScaledContents(true);
+    layoutA->addWidget(AncZ);
+
+    scrollWidget->setLayout(layoutA);
+    ui->scrollArea->setWidget(scrollWidget);
+
     connect(rLabel, SIGNAL(ValueChanged(int)), this, SLOT(onRedValueChanged(int)));
     connect(gLabel, SIGNAL(ValueChanged(int)), this, SLOT(onGreenValueChanged(int)));
     connect(bLabel, SIGNAL(ValueChanged(int)), this, SLOT(onBlueValueChanged(int)));
@@ -132,9 +138,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(tabwidget, &QTabWidget::currentChanged, this, &MainWindow::onTabCWheel);
     connect(tabwidget, &QTabWidget::currentChanged, this, &MainWindow::onTabHSB);
     connect(tabwidget, &QTabWidget::currentChanged, this, &MainWindow::onTabPltte);
-    connect(tabwidgetFrame, &QTabWidget::currentChanged, this, &MainWindow::onTabScale);
 
     connect(paletteLabel, &labelCLASS::PaletteValueChanged, this, &MainWindow::handlePaletteValueChange);
+    connect(AncZ, &AnchorLabel::AScaleChanged, this, &MainWindow::Z_Axis_Anchor);
 
     core->spinbox= ui->spinBox_3;
     UpdateRGB();
@@ -146,6 +152,123 @@ MainWindow::~MainWindow()
     rayAnimthread->stop(); // Thread'i düzgün şekilde durdur
     rayAnimthread->wait(); // Thread'in tamamen durmasını bekle
     delete ui;
+}
+
+void MainWindow::Z_Axis_Anchor(float scaleF, cv::Mat& imgZ)
+{
+    if (scaleF <= 0) {
+        qDebug() << "Error: Invalid scale factor (must be greater than 0)";
+        return;
+    }
+
+    if (imgZ.cols <= 0 || imgZ.rows <= 0) {
+        qDebug() << "Hata: Geçersiz görüntü boyutları";
+        return;
+    }
+
+    int ARectW= imgZ.cols/(scaleF);
+    int ARectH= imgZ.rows/(scaleF);
+
+    int stX= (imgZ.cols-ARectW)/2;
+    int stY= (imgZ.rows-ARectH)/2;
+
+    stX= std::max(0, stX);
+    stY= std::max(0, stY);
+
+    ARectW= std::min(ARectW, imgZ.cols-stX);
+    ARectH= std::min(ARectH, imgZ.rows-stY);
+
+    if(imgZ.cols*scaleF>ui->Screen->width()|| imgZ.rows*scaleF>ui->Screen->height()){
+        cv::Rect ARoi(stX, stY, ARectW, ARectH);
+        cv::Mat ARoiImg= imgZ(ARoi);
+
+        if(ARoiImg.empty()){
+            qDebug()<<"Error: Cropped image is empty";
+            return;
+        }
+        cv::resize(ARoiImg, ARoiImg, cv::Size(ui->Screen->width(), ui->Screen->height()));
+
+        ViewProcess(ARoiImg);
+    }
+    else
+    {
+        int ANewW= imgZ.cols * scaleF;
+        int ANewH= imgZ.rows * scaleF;
+
+        ANewW = std::max(1, ANewW);
+        ANewH = std::max(1, ANewH);
+
+        if (ANewW <= 0 || ANewH <= 0) {
+            qDebug() << "Hata: Geçersiz yeni boyutlar - ANewW: " << ANewW << " ANewH: " << ANewH;
+            return;
+        }
+
+        QImage ZScaleImg(ui->Screen->width(), ui->Screen->height(), QImage::Format_RGB888);
+        ZScaleImg.fill(Qt::black);
+
+        cv::resize(imgZ, imgZ, cv::Size(ANewW, ANewH));
+        QImage AImgQImage= matToImage(imgZ);
+
+        QPainter painter(&ZScaleImg);
+        int offsetX = (ZScaleImg.width() - AImgQImage.width())/2;
+        int offsetY = (ZScaleImg.height() - AImgQImage.height())/2;
+        painter.drawImage(offsetX, offsetY, AImgQImage);
+
+        ViewProcess(QImageToMat(ZScaleImg));
+    }
+}
+
+void MainWindow::Scale(cv::Mat imgR)
+{
+    core->rayanimset.ScaleOn=true;
+    ScaleTablePos(core->rayanimset.MousePos, core->rayanimset.Scale);
+
+    int rectW= imgR.cols/(core->rayanimset.Scale);
+    int rectH= imgR.rows/(core->rayanimset.Scale);
+
+    int startX= (imgR.cols-rectW)/2;
+    int startY= (imgR.rows-rectH)/2;
+
+    startX = std::max(0, startX);
+    startY = std::max(0, startY);
+
+    rectW = std::min(rectW, imgR.cols - startX);
+    rectH = std::min(rectH, imgR.rows - startY);
+
+    if (imgR.cols*core->rayanimset.Scale>ui->Screen->width() || imgR.rows*core->rayanimset.Scale>ui->Screen->height()){
+
+        cv::Rect roi(startX,startY,rectW,rectH);
+        cv::Mat roiImg= imgR(roi);
+
+        if (roiImg.empty()) {
+            qDebug() << "Error: Cropped image is empty!";
+            return;
+        }
+
+        cv::resize(roiImg, roiImg, cv::Size(ui->Screen->width(),ui->Screen->height()));
+
+        ViewProcess(roiImg);
+    }
+
+    else
+    {
+        int newW = imgR.cols * core->rayanimset.Scale;
+        int newH = imgR.rows * core->rayanimset.Scale;
+
+        QImage scaledImage(ui->Screen->width(), ui->Screen->height(), QImage::Format_RGB888);
+        scaledImage.fill(Qt::black);
+
+        cv::resize(imgR, imgR, cv::Size(newW, newH));
+
+        QImage imgQImage = matToImage(imgR);
+
+        QPainter painter(&scaledImage);
+        int offsetX = (scaledImage.width() - imgQImage.width())/2;
+        int offsetY = (scaledImage.height() - imgQImage.height())/2;
+        painter.drawImage(offsetX, offsetY, imgQImage);
+
+        ViewProcess(QImageToMat(scaledImage));
+    }
 }
 
 void MainWindow::handlePaletteValueChange(QColor color,int pieceIndex)
@@ -306,7 +429,6 @@ void MainWindow::on_spinBox_3_valueChanged(int arg1)
     core->rayanimset.Ray_bore= arg1;
 }
 
-
 void MainWindow::on_radioButton_clicked()
 {
     core->rayanimset.randomColorEnable =true;
@@ -379,61 +501,80 @@ void MainWindow::on_horizontalSlider_4_valueChanged(int value)
     }
 }
 
+void MainWindow::ViewProcess(cv::Mat imgP)
+{
+    qimg= matToImage(imgP);
+
+    if (qimg.isNull()) {
+        qDebug() << "QImage is empty!";
+        return;
+    }
+
+    ui->Screen->setPixmap(QPixmap::fromImage(qimg));
+    ui->Screen->resize(imgP.cols, imgP.rows);
+
+}
+
 void MainWindow::onprocessFinished(cv::Mat img)
 {
     if(core->rayanimset.ScaleOn){
+        core->rayanimset.AScaledOn=false;
+        Scale(img);
+    }
+    if(core->rayanimset.AScaledOn){
+        Z_Axis_Anchor(core->currScale, img);
+    }
+    else
+    {
+        ViewProcess(img);
+    }
+}
 
-        ScaleTablePos(core->rayanimset.MousePos, core->rayanimset.Scale);
-
-        int rectW= img.cols/(core->rayanimset.Scale);
-        int rectH= img.rows/(core->rayanimset.Scale);
-
-        int startX= (img.cols-rectW)/2;
-        int startY= (img.rows-rectH)/2;
-
-        startX = std::max(0, startX);
-        startY = std::max(0, startY);
-
-        rectW = std::min(rectW, img.cols - startX);
-        rectH = std::min(rectH, img.rows - startY);
-
-        if (img.cols*core->rayanimset.Scale>ui->Screen->width() || img.rows*core->rayanimset.Scale>ui->Screen->height()){
-
-            cv::Rect roi(startX,startY,rectW,rectH);
-            cv::Mat roiImg= img(roi);
-
-            cv::resize(roiImg, roiImg, cv::Size(ui->Screen->width(),ui->Screen->height()));
-
-            qimg= matToImage(roiImg);
-            ui->Screen->setPixmap(QPixmap::fromImage(qimg));
-        }
-
-        else
-        {
-            int newW = img.cols * core->rayanimset.Scale;
-            int newH = img.rows * core->rayanimset.Scale;
-
-            QImage scaledImage(ui->Screen->width(), ui->Screen->height(), QImage::Format_RGB888);
-            scaledImage.fill(Qt::black);
-
-            cv::resize(img, img, cv::Size(newW, newH));
-
-            QImage imgQImage = matToImage(img);
-
-            QPainter painter(&scaledImage);
-            int offsetX = (scaledImage.width() - imgQImage.width()) / 2;
-            int offsetY = (scaledImage.height() - imgQImage.height()) / 2;
-            painter.drawImage(offsetX, offsetY, imgQImage);
-
-            ui->Screen->setPixmap(QPixmap::fromImage(scaledImage));
-        }
+cv::Mat MainWindow::QImageToMat(const QImage &image)
+{
+    if (image.isNull()) {
+        qDebug() << "QImage is null, returning empty cv::Mat";
+        return cv::Mat();
     }
 
-    else {
+    switch (image.format()) {
+    case QImage::Format_RGB888: {
 
-        qimg = matToImage(img);
-        ui->Screen->setPixmap(QPixmap::fromImage(qimg));
-        ui->Screen->resize(img.cols, img.rows);
+        cv::Mat mat(image.height(), image.width(), CV_8UC3, (void*)image.bits(), image.bytesPerLine());
+        return mat.clone();
+    }
+    case QImage::Format_BGR888: {
+
+        cv::Mat mat(image.height(), image.width(), CV_8UC3, (void*)image.bits(), image.bytesPerLine());
+        return mat.clone();
+    }
+    case QImage::Format_RGB32: {
+
+        cv::Mat mat(image.height(), image.width(), CV_8UC4, (void*)image.bits(), image.bytesPerLine());
+        cv::Mat matRGB;
+        cv::cvtColor(mat, matRGB, cv::COLOR_BGRA2BGR);
+        return matRGB.clone();
+    }
+    case QImage::Format_Grayscale8: {
+
+        cv::Mat mat(image.height(), image.width(), CV_8UC1, (void*)image.bits(), image.bytesPerLine());
+        return mat.clone();
+    }
+    case QImage::Format_ARGB32: {
+
+        cv::Mat mat(image.height(), image.width(), CV_8UC4, (void*)image.bits(), image.bytesPerLine());
+        cv::Mat matRGB;
+        cv::cvtColor(mat, matRGB, cv::COLOR_BGRA2BGR);
+        return matRGB.clone();
+    }
+    case QImage::Format_Indexed8: {
+
+        QImage imgCopy = image.convertToFormat(QImage::Format_RGB888);
+        return QImageToMat(imgCopy);
+    }
+    default:
+        qDebug() << "Unsupported QImage format: " << image.format();
+        return cv::Mat();
     }
 }
 
@@ -686,9 +827,3 @@ void MainWindow::onTabHSB(int index)
     }
 }
 
-void MainWindow::onTabScale(int index)
-{
-    if(index==0)
-    {
-    }
-}

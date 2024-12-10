@@ -44,6 +44,8 @@ public:
         bool useRGB= false;
         bool usePalette= false;
         bool ScaleOn=false;
+        bool AScaledOn=false;
+        bool RotateOn= false;
 
         int brightness=0;
 
@@ -75,13 +77,20 @@ public:
     RayAnimationSettings rayanimset;
     cv::Mat Img;
     QSpinBox* spinbox;
+
     cv::Scalar currentRayColor;
     cv::Scalar HSBcolor;
     cv::Scalar RGBcolor;
     std::vector<cv::Scalar> PaletteColor;
     cv::Scalar RandomColor();
+
+    cv::Point Offset(cv::Point p);
+
     QColor PColor;
-    cv::Scalar HSBcolorActive[8];
+
+    int x_a=0; int y_a=0;
+    int AScale=1; double currScale=1.0;
+
 };
 
 #endif // CORE_H

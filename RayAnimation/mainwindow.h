@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 #include <QScrollArea>
 #include <QMainWindow>
+#include "anchorlabel.h"
 #include "core.h"
 #include "hsbcolorwheel.h"
 #include "labelclass.h"
@@ -26,17 +27,24 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
     ChannelLabel*rLabel;
     ChannelLabel*gLabel;
     ChannelLabel*bLabel;
+
     labelCLASS*paletteLabel;
+
+    AnchorLabel* AncX;
+    AnchorLabel* AncY;
+    AnchorLabel* AncZ;
 
 public slots:
     void onRedValueChanged(int value);
     void onGreenValueChanged(int value);
     void onBlueValueChanged(int value);
-
     void handlePaletteValueChange(QColor color,int pieceIndex);
+
+    void Z_Axis_Anchor(float scaleF, cv::Mat& imgZ);
 
 private slots:
     void on_spinBox_valueChanged(int arg1);
@@ -72,6 +80,7 @@ private:
     RayAnimThread* rayAnimthread;
 
     bool isRunning;
+    double scaleFactor;
 
     QImage matToImage(const cv::Mat &mat) const noexcept;
 
@@ -84,32 +93,32 @@ private:
     HSBColorWheel* hsbcolorwheel;
 
     QTabWidget *tabwidget;
-    QTabWidget *tabwidgetFrame;
 
     void onTabChanged(int index);
     void onTabCWheel(int index);
     void onTabHSB(int index);
     void onTabPltte(int index);
-    void onTabScale(int index);
 
     QVBoxLayout *sliderLayout;
     QVBoxLayout *paletteLayout;
-    QVBoxLayout *scaleLayout;
 
     QWidget *sliderTab;
     QWidget *sliderTabPalette;
-    QWidget *ScaleTab;
 
     QScrollArea* scrollArea;
     QScrollArea *palettescrolarea;
-    QScrollArea *scaleScrollArea;
 
     void UpdateRGB();
     void drawColors();
     void updateRayPaletteColors();
+
     void ScaleTablePos(const QPointF &currCursorPoint, double scaleFactor);
+    void ViewProcess(cv::Mat imgP);
+    cv::Mat QImageToMat(const QImage &image);
+    void Scale(cv::Mat imgR);
 
     QImage qimg;
+    QImage finalImage;
 
     QPoint currCursorPoint;
 

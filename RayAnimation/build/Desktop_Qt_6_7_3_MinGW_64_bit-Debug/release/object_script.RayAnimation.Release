@@ -1,3 +1,5 @@
+release/anchorbutton.o
+release/anchorlabel.o
 release/buttoneventclass.o
 release/channellabel.o
 release/colorwheelwidget.o
@@ -7,6 +9,8 @@ release/labelclass.o
 release/main.o
 release/mainwindow.o
 release/rayanimthread.o
+release/moc_anchorbutton.o
+release/moc_anchorlabel.o
 release/moc_buttoneventclass.o
 release/moc_channellabel.o
 release/moc_colorwheelwidget.o

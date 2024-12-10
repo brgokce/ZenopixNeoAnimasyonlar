@@ -3,8 +3,8 @@
 
 Core::Core()
 {
-}
 
+}
 
 cv::Scalar Core::RandomColor()
 {
@@ -14,3 +14,7 @@ cv::Scalar Core::RandomColor()
     return cv::Scalar(blue, green, red);
 }
 
+cv::Point Core::Offset(cv::Point p)
+{
+    return cv::Point(p.x+x_a, p.y+y_a);
+}
