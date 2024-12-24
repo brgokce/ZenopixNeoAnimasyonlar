@@ -1,0 +1,10 @@
+debug/core.o
+debug/main.o
+debug/mainwindow.o
+debug/rgbbuttonclass.o
+debug/rgblabel.o
+debug/smoothlinesanimationthread.o
+debug/moc_mainwindow.o
+debug/moc_rgbbuttonclass.o
+debug/moc_rgblabel.o
+debug/moc_smoothlinesanimationthread.o

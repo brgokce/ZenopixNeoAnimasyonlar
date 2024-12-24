@@ -1,0 +1,10 @@
+release/core.o
+release/main.o
+release/mainwindow.o
+release/rgbbuttonclass.o
+release/rgblabel.o
+release/smoothlinesanimationthread.o
+release/moc_mainwindow.o
+release/moc_rgbbuttonclass.o
+release/moc_rgblabel.o
+release/moc_smoothlinesanimationthread.o
