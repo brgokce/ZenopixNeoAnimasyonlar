@@ -1,0 +1,10 @@
+debug/core.o
+debug/main.o
+debug/mainwindow.o
+debug/rgblabl.o
+debug/rgbwidget.o
+debug/snowflakeanimationthread.o
+debug/moc_mainwindow.o
+debug/moc_rgblabl.o
+debug/moc_rgbwidget.o
+debug/moc_snowflakeanimationthread.o

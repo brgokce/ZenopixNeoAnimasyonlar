@@ -1,0 +1,10 @@
+release/core.o
+release/main.o
+release/mainwindow.o
+release/rgblabl.o
+release/rgbwidget.o
+release/snowflakeanimationthread.o
+release/moc_mainwindow.o
+release/moc_rgblabl.o
+release/moc_rgbwidget.o
+release/moc_snowflakeanimationthread.o

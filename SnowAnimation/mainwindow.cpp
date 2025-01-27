@@ -1,5 +1,8 @@
 #include "mainwindow.h"
+#include "rgblabl.h"
 #include "ui_mainwindow.h"
+#include <QtCore>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -22,8 +25,46 @@ MainWindow::MainWindow(QWidget *parent)
     ui->znpx->setPixmap((QPixmap("C:/Users/ASUS/Downloads/unnamed.png")));
     ui->znpx->setScaledContents(true);
 
+    ui->label_8->setPixmap((QPixmap("C:/Users/ASUS/Downloads/lantern.png")));
+    ui->label_8->setScaledContents(true);
+
+
     core= new Core();
+
     snowTh= new SnowFlakeAnimationThread(core,this);
+
+    tabwidget = new QTabWidget(this);
+    sliderTab = new QWidget();
+    tabwidget->addTab(sliderTab, "RGB");
+    sliderLayout = new QVBoxLayout(sliderTab);
+    scrollArea= new QScrollArea(sliderTab);
+    scrollArea->setFixedSize(334, 273);
+
+    if(ui->gridLayout){
+        ui->gridLayout->addWidget(tabwidget);
+        tabwidget->setStyleSheet("background: transparent;");
+    }
+
+    rLabel= new RGBLabl(scrollArea);
+    rLabel->setGeometry(5,10,256,30);
+    rLabel->setScaledContents(true);
+
+    gLabel= new RGBLabl(scrollArea);
+    gLabel->setScaledContents(true);
+    gLabel->setGeometry(5,50,256,30);
+
+    bLabel= new RGBLabl(scrollArea);
+    bLabel->setGeometry(5,90,256,30);
+    bLabel->setScaledContents(true);
+
+    connect(snowTh,SIGNAL(processFinished(cv::Mat)),this,SLOT(onprocessFinished(cv::Mat)));
+
+    connect(rLabel, SIGNAL(ValueChanged(int)), this, SLOT(onRedValueChanged(int)));
+    connect(gLabel, SIGNAL(ValueChanged(int)), this, SLOT(onGreenValueChanged(int)));
+    connect(bLabel, SIGNAL(ValueChanged(int)), this, SLOT(onBlueValueChanged(int)));
+
+    UpdateRGB();
+
 }
 
 MainWindow::~MainWindow()
@@ -33,68 +74,46 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_snowflake_spinbx_valueChanged(int arg1)
+void MainWindow::on_lowerR_spnbx_valueChanged(int arg1)
 {
-    core->snowFlakeStaticParameters.NumberOfSnowFlake= arg1;
+    core->setting.LowerRadiusLimit=arg1;
 }
 
 
-void MainWindow::on_extent_snowflake_spnbx_valueChanged(int arg1)
+void MainWindow::on_UpperR_spnbx_valueChanged(int arg1)
 {
-    //yarıçap olarak boyutu alıyorum.
-    core->snowFlakeStaticParameters.ExtentSnowFlake= static_cast<double>(arg1)/2.0;
+    core->setting.UpperRadiusLimit=arg1;
 }
 
 
-void MainWindow::on_color_combobx_currentIndexChanged(int index)
+void MainWindow::on_NumberOfStar_valueChanged(int arg1)
 {
-    if(index==0){
-        core->snowFlakeStaticParameters.randomColorEnable=true;
-    }
-    else if(index==1){
-        core->snowFlakeStaticParameters.randomColorEnable=false;
-        core->snowFlakeStaticParameters.SteadyColorEnable=true;
-    }
+    core->setting.StarCount= arg1;
 }
 
 
-void MainWindow::on_Speed_sldr_valueChanged(int value)
+void MainWindow::on_LowerT_spnbx_valueChanged(int arg1)
 {
-    if(value>30){
-        core->snowFlakeStaticParameters.AnimSpeed= value/10.0;
-    }
-    else
-    {
-        core->snowFlakeStaticParameters.AnimSpeed= 1000/(101-value);
-    }
-
+    core->setting.LowerOnTime=arg1;
 }
 
 
-void MainWindow::on_brightness_sldr_valueChanged(int value)
+void MainWindow::on_UpperT_spnbx_valueChanged(int arg1)
 {
-    core->snowFlakeStaticParameters.brightnessChanged= true;
-
-    if (value == 0)
-    {
-        core->snowFlakeStaticParameters.brightness = 0;
-        return;
-    }
-
-    double A= 255.0;
-    double mu= static_cast<double>(value);
-
-    double sigma = 1.0 + (value / 10.0);
-    double brightness= A * exp(-pow(value - mu, 2) / (2 * pow(sigma, 2)));
-
-    if (brightness < 0)
-    {
-        brightness = 0;
-    }
-
-    core->snowFlakeStaticParameters.brightness = static_cast<int>(brightness);
+    core->setting.UpperOnTime=arg1;
 }
 
+
+void MainWindow::on_Rising_sldr_valueChanged(int value)
+{
+    core->setting.RisingSpeed=value;
+}
+
+
+void MainWindow::on_falling_sldr_valueChanged(int value)
+{
+    core->setting.FallingSpeed=value;
+}
 
 void MainWindow::on_startBt_clicked()
 {
@@ -151,13 +170,146 @@ QImage MainWindow::matToImage(const cv::Mat &mat) const noexcept
     return result.copy();
 }
 
-void MainWindow::updateRayColors()
+void MainWindow::on_comboBox_currentIndexChanged(int index)
 {
-    if(!core->snowFlakeStaticParameters.randomColorEnable){
-        cv::Scalar fixedColor(core->snowFlakeStaticParameters.color[2], core->snowFlakeStaticParameters.color[1], core->snowFlakeStaticParameters.color[0]);
-        for(int i=0; i<core->snowFlakeStaticParameters.snowFlakeVector.size(); ++i){
-            core->snowFlakeStaticParameters.snowFlakeVector[i].currColor= fixedColor;
-        }
+    switch(index){
+    case 0:
+        core->currMode= Core::None;
+        break;
+    case 1:
+        core->currMode= Core::CircleMode;
+        break;
+    case 2:
+        core->currMode= Core::StarMode;
+        break;
+    case 3:
+        core->currMode= Core::SquareMode;
+        break;
+    case 4:
+        core->currMode= Core::SnowFlakeMode;
+    default:
+        break;
     }
 }
 
+void MainWindow::on_color_combobx_currentIndexChanged(int index)
+{
+    switch(index){
+    case 0:
+        break;
+    case 1:
+        core->setting.randomColorState=true;
+        break;
+    case 2:
+        core->setting.fixedColorState=true;
+        core->setting.randomColorState=false;
+    default:
+        break;
+    }
+}
+
+
+void MainWindow::onRedValueChanged(int value)
+{
+    core->setting.useRGB= true;
+
+    core->rgbWidgetValues.RWidgetValue= value;
+    UpdateRGB();
+
+    qDebug() << "onRedValueChanged tetiklendi, değer: " << value;
+
+    core->color[2]= value;
+    addColorToSmoothCircleVector();
+}
+
+void MainWindow::onGreenValueChanged(int value)
+{
+    core->setting.useRGB= true;
+    core->rgbWidgetValues.GWidgetValue= value;
+    UpdateRGB();
+
+    qDebug() << "onGreenValueChanged tetiklendi, değer: " << value;
+
+    core->color[1]= value;
+    addColorToSmoothCircleVector();
+
+}
+
+void MainWindow::onBlueValueChanged(int value)
+{
+    core->setting.useRGB= true;
+    core->rgbWidgetValues.BWidgetValue= value;
+    UpdateRGB();
+
+    qDebug() << "onBlueValueChanged tetiklendi, değer: " << value;
+
+    core->color[0]= value;
+    addColorToSmoothCircleVector();
+}
+
+void MainWindow::UpdateRGB()
+{
+    uint8_t colR,colG,colB;
+
+    core->setting.useRGB= true;
+
+    for(int col=0; col<256; col++)
+    {
+        colR= col;
+        colG= core->rgbWidgetValues.GWidgetValue;
+        colB= core->rgbWidgetValues.BWidgetValue;
+
+        if (col < core->rgbWidgetValues.RImage.width())
+        {
+            core->rgbWidgetValues.RImage.setPixelColor(col, 0, QColor(colR, colG, colB));
+        }
+
+        colR= core->rgbWidgetValues.RWidgetValue;
+        colG= col;
+        colB= core->rgbWidgetValues.BWidgetValue;
+
+        if (col < core->rgbWidgetValues.GImage.width())
+        {
+            core->rgbWidgetValues.GImage.setPixelColor(col,0, QColor(colR, colG, colB));
+        }
+
+        colR= core->rgbWidgetValues.RWidgetValue;
+        colG= core->rgbWidgetValues.GWidgetValue;
+        colB= col;
+
+        if (col < core->rgbWidgetValues.BImage.width())
+        {
+            core->rgbWidgetValues.BImage.setPixelColor(col,0, QColor(colR, colG, colB));
+        }
+    }
+    rLabel->setPixmap(QPixmap::fromImage(core->rgbWidgetValues.RImage));
+    gLabel->setPixmap(QPixmap::fromImage(core->rgbWidgetValues.GImage));
+    bLabel->setPixmap(QPixmap::fromImage(core->rgbWidgetValues.BImage));
+}
+
+void MainWindow::addColorToSmoothCircleVector()
+{
+    Core::NightSkyStar star;
+
+    int red = qBound(0, static_cast<int>(core->color[0]), 255);
+    int green = qBound(0, static_cast<int>(core->color[1]), 255);
+    int blue = qBound(0, static_cast<int>(core->color[2]), 255);
+
+    const int baseTotalRGB= 3*190;
+    int newTotalRGB= red+green+blue;
+
+    if (newTotalRGB > baseTotalRGB) {
+        double scale = static_cast<double>(baseTotalRGB) / newTotalRGB;
+        red = static_cast<int>(red * scale);
+        green = static_cast<int>(green * scale);
+        blue = static_cast<int>(blue * scale);
+    }
+
+    QColor newColor(blue, green, red);
+
+    if(core->setting.StarColor== QColor(190,190,190)){
+        if(core->setting.useRGB){
+            core->setting.StarColor= newColor;
+        }
+    }
+}

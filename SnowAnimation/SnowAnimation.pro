@@ -12,11 +12,15 @@ SOURCES += \
     core.cpp \
     main.cpp \
     mainwindow.cpp \
+    rgblabl.cpp \
+    rgbwidget.cpp \
     snowflakeanimationthread.cpp
 
 HEADERS += \
     core.h \
     mainwindow.h \
+    rgblabl.h \
+    rgbwidget.h \
     snowflakeanimationthread.h
 
 FORMS += \

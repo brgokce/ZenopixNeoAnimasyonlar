@@ -92,6 +92,7 @@ void SmoothLinesAnimationThread::SmoothLineAnimationDraws(cv::Mat& img)
             previousColor = currentColor;
     }
 }
+
     for(auto&line: core->StaticSmoothSet.Sline){
         line.position+= static_cast<int>(5*speed);
     }
@@ -105,6 +106,8 @@ void SmoothLinesAnimationThread::SmoothLineAnimationDraws(cv::Mat& img)
     if(core->StaticSmoothSet.offset>= core->Image.cols){
         core->StaticSmoothSet.offset=0;
     }
+
+
 }
 
 void SmoothLinesAnimationThread::run()
@@ -116,6 +119,7 @@ void SmoothLinesAnimationThread::run()
             break;
 
         SmoothLineAnimationDraws(core->Image);
+
         emit processFinished(core->Image);
 
         if (core->StaticSmoothSet.userChangeSpeed){
@@ -126,5 +130,6 @@ void SmoothLinesAnimationThread::run()
         {
             msleep(100);
         }
+
     }
 }

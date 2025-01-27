@@ -30,6 +30,7 @@ private:
     double speed=1.0;
 
     void SmoothLineAnimationDraws(cv::Mat& img);
+    cv::Mat histImg;
 };
 
 #endif // SMOOTHLINESANIMATIONTHREAD_H

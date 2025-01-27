@@ -17,6 +17,9 @@ public:
     void updateColors();
     void stop();
 
+    cv::Scalar CircleColor;
+    bool isDraw=false;
+
 signals:
     void processFinished(cv::Mat img);
     void colorsUpdated();
@@ -26,6 +29,12 @@ private:
     bool running;
     QMutex mutex;
 
+    void circleAnimation(cv::Mat& img);
+    void starAnimation(cv::Mat& img);
+    void squareAnimation(cv::Mat& img);
+    void snowflakeAnimation(cv::Mat& img);
+
+    void time();
 };
 
 #endif // SNOWFLAKEANIMATIONTHREAD_H

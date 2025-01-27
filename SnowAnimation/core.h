@@ -10,45 +10,102 @@ class Core
 public:
     Core();
 
-    struct SnowFlakeAnimationDynamicParameters
+    enum Animation_Mode
     {
-        int Angle;
-        int dir;
-
-        cv::Point startPoint;
-        cv::Point endPoint;
-
-        QPoint position;
-
-        cv::Scalar currColor;
-
+        None,
+        CircleMode,
+        StarMode,
+        SquareMode,
+        SnowFlakeMode
     };
 
-    struct SnowFlakeAnimationParameters
+    Animation_Mode currMode= None;
+
+    enum CircleAnimDir
     {
-        int AnimSpeed=1;
-        int NumberOfSnowFlake=1;
+        Plus,
+        Minus
+    };
 
-        double ExtentSnowFlake=5;
+    enum onColor_Mode
+    {
+        none,
+        Random,
+        Steady,
+    };
+    onColor_Mode currcolorMode= none;
 
-        cv::Scalar color= cv::Scalar(0,0,0);
+    enum on_speed_Mode
+    {
+        NoNe,
+        Dinamic
+    };
 
+    on_speed_Mode currspeed=NoNe;
+
+    enum NightSkyStarStates
+    {
+        Rising,
+        On,
+        Falling
+    };
+
+    struct NightSkyStar
+    {
+        cv::Point pos;
+        double Brightness;
+        NightSkyStarStates state;
+        cv::Scalar color;
+        int onTime;
+        int starRadius;
+    };
+
+    struct NightSkyStarSetting
+    {
+        //radius settings
+        int LowerRadiusLimit=1;
+        int UpperRadiusLimit= 3;
+
+        //time settings
+        int LowerOnTime=1000;
+        int UpperOnTime=5000;
+
+        //speed
+        double RisingSpeed=0.2;
+        double FallingSpeed=0.05;
+
+        //state on-off
+        bool randomColorState=false;
+        bool fixedColorState=false;
         bool useRGB=false;
-        bool userChangSpeed=false;
-        bool randomColorEnable= false;
-        bool brightnessChanged= false;
-        bool SteadyColorEnable=false;
 
-        int brightness=0;
+        //animation
+        int StarCount=50;
 
-        QVector<SnowFlakeAnimationDynamicParameters> snowFlakeVector;
+        //color
+        QColor StarColor= QColor(190,190,190);
     };
 
-    SnowFlakeAnimationParameters snowFlakeStaticParameters;
+    QVector<NightSkyStar>nightSkyStars;
+    NightSkyStarSetting setting;
+
+
+    struct RGBWidgetValues
+    {
+        uint8_t RWidgetValue=0;
+        uint8_t GWidgetValue=0;
+        uint8_t BWidgetValue=0;
+
+        QImage RImage= QImage(256,1, QImage::Format_RGB888);
+        QImage GImage= QImage(256,1, QImage::Format_RGB888);
+        QImage BImage= QImage(256,1, QImage::Format_RGB888);
+    };
+
+    RGBWidgetValues rgbWidgetValues;
 
     cv::Scalar RandomColor();
     cv::Mat Image;
-
+    cv::Scalar color= cv::Scalar(0,0,0);
 };
 
 #endif // CORE_H
